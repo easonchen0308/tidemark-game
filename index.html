@@ -1,252 +1,3761 @@
-<!doctype html>
-<html lang="zh-Hant">
+<!DOCTYPE html>
+<html lang="zh-TW">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#08171e">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>絕對傳奇：潮痕試煉</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
-  <style>
-    :root { --ink:#edf5f2; --muted:#a7bbb9; --paper:#f6edd7; --sea:#0b2932; --sea-deep:#06151b; --line:rgba(184,222,212,.24); --gold:#e9be70; --cyan:#81d7d7; --danger:#ea8e81; }
-    * { box-sizing:border-box; }
-    html { background:var(--sea-deep); }
-    body { margin:0; min-height:100vh; color:var(--ink); font-family:"Noto Sans TC",sans-serif; background:linear-gradient(180deg,rgba(5,18,24,.82),rgba(5,18,24,.97)),var(--page-bg) center top/cover fixed; }
-    button,input { font:inherit; }
-    button { cursor:pointer; }
-    .app { width:min(760px,100%); min-height:100vh; margin:0 auto; padding:env(safe-area-inset-top) 16px calc(28px + env(safe-area-inset-bottom)); background:rgba(5,18,24,.76); }
-    .hero { min-height:100vh; display:grid; place-items:center; padding:28px 4px; }
-    .welcome { width:100%; text-align:center; }
-    .logo { display:block; width:min(300px,76vw); max-height:140px; object-fit:contain; margin:0 auto 18px; }
-    .eyebrow { color:var(--cyan); font-size:.78rem; letter-spacing:.13em; margin:0 0 8px; }
-    h1,h2,h3 { font-family:"Noto Serif TC",serif; margin:0; letter-spacing:0; }
-    h1 { font-size:clamp(2rem,7vw,3.35rem); line-height:1.18; }
-    h2 { font-size:1.55rem; }
-    h3 { font-size:1.12rem; }
-    .sub { color:var(--gold); margin:12px auto 0; max-width:34em; }
-    .intro { color:var(--muted); text-align:left; white-space:pre-line; line-height:1.75; margin:26px auto; max-width:38em; }
-    .panel { background:rgba(13,38,46,.82); border:1px solid var(--line); border-radius:10px; padding:18px; box-shadow:0 18px 48px rgba(0,0,0,.22); }
-    .setup { max-width:490px; margin:0 auto; text-align:left; }
-    label { display:block; color:var(--muted); font-size:.85rem; margin-bottom:8px; }
-    input { width:100%; padding:14px 15px; color:var(--ink); border:1px solid rgba(129,215,215,.48); border-radius:7px; background:#071c23; outline:none; }
-    input:focus { border-color:var(--cyan); box-shadow:0 0 0 3px rgba(129,215,215,.13); }
-    .button-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
-    .btn { border:1px solid transparent; border-radius:7px; padding:11px 16px; min-height:44px; color:#06161c; background:var(--cyan); font-weight:700; }
-    .btn:hover { filter:brightness(1.08); }
-    .btn-secondary { color:var(--ink); background:rgba(8,28,35,.8); border-color:var(--line); }
-    .btn-gold { color:#20170a; background:var(--gold); }
-    .btn-danger { color:#ffe9e5; background:rgba(132,43,36,.45); border-color:rgba(234,142,129,.55); }
-    .notice { color:var(--muted); font-size:.82rem; line-height:1.6; margin:14px 0 0; }
-    .error { color:#ffd2cc; margin:10px 0 0; min-height:1.5em; }
-    .topbar { position:sticky; top:0; z-index:4; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 0 12px; background:linear-gradient(180deg,rgba(5,18,24,.98),rgba(5,18,24,.85),transparent); }
-    .brand { min-width:0; }
-    .brand strong { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .brand span { color:var(--muted); font-size:.76rem; }
-    .icon-button { width:42px; height:42px; padding:0; color:var(--ink); background:#0d2931; border:1px solid var(--line); border-radius:7px; font-size:1.2rem; }
-    .progress { height:5px; background:#133039; overflow:hidden; border-radius:999px; margin:0 0 18px; }
-    .progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--gold)); transition:width .25s ease; }
-    .mission-sheet { position:fixed; inset:0; z-index:10; background:rgba(1,9,12,.72); display:flex; justify-content:center; align-items:flex-end; padding:16px; }
-    .mission-sheet[hidden] { display:none; }
-    .mission-drawer { width:min(720px,100%); max-height:78vh; overflow:auto; padding:18px; background:#0b2229; border:1px solid var(--line); border-radius:10px; box-shadow:0 -10px 48px rgba(0,0,0,.42); }
-    .drawer-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-    .mission-list { display:grid; gap:8px; }
-    .mission-item { width:100%; min-height:64px; text-align:left; display:flex; gap:12px; align-items:center; padding:10px; color:var(--ink); background:#0d2931; border:1px solid var(--line); border-radius:7px; }
-    .mission-item[disabled] { cursor:not-allowed; opacity:.45; }
-    .mission-item.current { border-color:var(--gold); }
-    .mission-item.done { border-color:rgba(114,211,164,.55); }
-    .mission-number { flex:0 0 34px; font-weight:700; color:var(--gold); }
-    .mission-name { min-width:0; flex:1; }
-    .mission-name small { display:block; color:var(--muted); margin-top:2px; }
-    .badge { color:#07221f; background:#8edebc; border-radius:999px; font-size:.72rem; padding:3px 7px; }
-    .badge.locked { color:#9aa9a9; background:#21383c; }
-    .stage { display:grid; gap:14px; }
-    .mission-heading { padding:18px; background:linear-gradient(125deg,rgba(16,55,64,.93),rgba(13,31,37,.93)); border:1px solid var(--line); border-radius:10px; }
-    .chapter { color:var(--cyan); font-size:.8rem; letter-spacing:.1em; margin:0 0 6px; }
-    .story { white-space:pre-line; color:#d8e5e1; line-height:1.8; margin:0; }
-    .art { width:100%; max-height:500px; object-fit:cover; display:block; border:1px solid var(--line); border-radius:8px; background:#06151b; }
-    .story-card { display:grid; gap:14px; }
-    .question { color:#fff5dc; font-size:1.06rem; line-height:1.7; white-space:pre-line; }
-    .choices { display:grid; gap:9px; }
-    .choice { display:flex; align-items:flex-start; gap:10px; width:100%; color:var(--ink); text-align:left; padding:13px; background:#102e37; border:1px solid var(--line); border-radius:7px; }
-    .choice:hover,.choice.selected { border-color:var(--gold); background:rgba(90,67,31,.38); }
-    .choice-letter { flex:0 0 28px; color:#1e1708; background:var(--gold); border-radius:50%; text-align:center; font-weight:700; line-height:28px; }
-    .hint-list { display:grid; gap:8px; margin-top:10px; }
-    .hint { padding:10px; border-left:3px solid var(--cyan); color:#d8e8e5; background:rgba(12,49,57,.7); line-height:1.6; }
-    .answer-feedback { min-height:1.5em; margin:0; color:#ffd3cc; }
-    .success { border-color:rgba(142,222,188,.62); background:rgba(20,76,64,.34); }
-    .success p { color:#ddf4e8; }
-    .totem { color:var(--gold); white-space:pre-line; line-height:1.7; }
-    .finale { text-align:center; padding:8px 0; }
-    .finale img { width:100%; max-height:520px; object-fit:cover; border:1px solid var(--line); border-radius:8px; }
-    .certificate { position:relative; min-height:550px; margin-top:16px; padding:180px 24px 32px; color:#241a0e; background:#e8d0a1 url('assets/completion-certificate.webp') center/cover; border:1px solid rgba(233,190,112,.7); border-radius:8px; overflow:hidden; }
-    .certificate::before { content:""; position:absolute; inset:0; background:rgba(250,239,207,.1); }
-    .certificate > * { position:relative; }
-    .certificate h2 { font-size:clamp(1.55rem,6vw,2.35rem); }
-    .certificate .team { font-family:"Noto Serif TC",serif; font-size:clamp(1.5rem,7vw,2.6rem); margin:30px 0 12px; font-weight:900; }
-    .certificate p { line-height:1.8; margin:8px auto; max-width:21em; }
-    .certificate .certificate-meta { margin-top:38px; font-size:.85rem; }
-    .empty { padding:30px 18px; text-align:center; color:var(--muted); }
-    .footer-note { color:var(--muted); text-align:center; font-size:.75rem; line-height:1.6; margin:22px 0 0; }
-    @media (min-width:700px) { .app { padding-left:28px; padding-right:28px; } .panel { padding:22px; } }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>絕對傳奇：潮痕試煉</title>
+    
+    <!-- iOS Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="潮痕試煉">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;700&family=Noto+Serif+TC:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Game data -->
+    <script src="game-data.js"></script>
+    <script src="static-seed.js"></script>
+    <script src="data.js"></script>
+
+    <style>
+        body, html {
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* Quest Tab Switcher and Glowing Borders Styles */
+        .quest-tab {
+            color: rgba(255,255,255,0.6) !important;
+            border: 1px solid transparent !important;
+            box-shadow: none !important;
+        }
+        .quest-tab.active {
+            color: white !important;
+            transition: all 0.3s ease;
+        }
+        #tab-main-quests.active {
+            background: rgba(255, 193, 7, 0.15) !important;
+            border: 1px solid var(--accent-yellow) !important;
+            color: var(--accent-yellow) !important;
+            box-shadow: 0 0 10px rgba(255, 193, 7, 0.25) !important;
+        }
+        #tab-side-quests.active {
+            background: rgba(0, 229, 255, 0.15) !important;
+            border: 1px solid #00e5ff !important;
+            color: #00e5ff !important;
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.25) !important;
+        }
+        .mission-card.quest-side {
+            border: 1px solid rgba(0, 229, 255, 0.2) !important;
+            background: linear-gradient(135deg, rgba(0, 229, 255, 0.03), rgba(0, 0, 0, 0.6)) !important;
+        }
+        .mission-card.quest-side:hover, .mission-card.quest-side.available:active {
+            border-color: #00e5ff !important;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.3) !important;
+        }
+        .mission-card.quest-main {
+            border: 1px solid rgba(255, 193, 7, 0.2) !important;
+            background: linear-gradient(135deg, rgba(255, 193, 7, 0.03), rgba(0, 0, 0, 0.6)) !important;
+        }
+        .mission-card.quest-main:hover, .mission-card.quest-main.available:active {
+            border-color: var(--accent-yellow) !important;
+            box-shadow: 0 0 15px rgba(255, 193, 7, 0.3) !important;
+        }
+
+
+
+        /* extracted */
+
+        /* extracted */
+
+        /* extracted */
+
+        /* extracted */
+
+        /* 全域背景層 */
+        /* extracted */
+
+        /* extracted */
+
+        /* 畫面轉跳控制 */
+        /* extracted */
+
+        /* extracted */
+
+        /* extracted */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* extracted */
+
+        /* 任務列表視覺 */
+        .mission-header {
+            margin-bottom: 25px;
+            border-left: 4px solid var(--accent-yellow);
+            padding-left: 15px;
+        }
+        .mission-header p { font-size: 0.75rem; letter-spacing: 4px; color: var(--accent-yellow); text-transform: uppercase; }
+        .mission-header h2 { font-size: 1.8rem; font-weight: 700; }
+
+        .mission-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            margin-bottom: 20px;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .mission-card:active { transform: scale(0.98); }
+        .mission-card.available { border-color: var(--accent-yellow); background: rgba(255, 215, 0, 0.08); animation: cardPulse 3s infinite; }
+        .mission-card.passed { opacity: 0.6; filter: grayscale(0.5); background: rgba(0, 0, 0, 0.5); }
+        .mission-card.locked { opacity: 0.25; pointer-events: none; cursor: not-allowed; }
+        
+        @keyframes cardPulse { 0%, 100% { box-shadow: 0 0 8px rgba(255, 215, 0, 0.1); } 50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.2); } }
+
+        .pass-stamp-mini {
+            position: absolute; right: 20px; top: 50%; transform: translateY(-50%) rotate(-15deg);
+            border: 4px solid var(--pass-green); color: var(--pass-green); padding: 4px 15px;
+            border-radius: 10px; font-weight: 900; font-size: 1.6rem; opacity: 0.8; display: none;
+            animation: stampZoom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .passed .pass-stamp-mini { display: block; }
+        @keyframes stampZoom { from { transform: translateY(-50%) scale(4); opacity: 0; } }
+
+        /* extracted */
+        /* extracted */
+
+        /* extracted */
+        .btn-back:active {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+        }
+
+        .next-arrow { text-align:right; font-size:1.5rem; margin-top:20px; color:var(--accent-yellow); cursor:pointer; animation: bounceX 1.1s infinite; }
+        @keyframes bounceX { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(8px); } }
+
+        /* 內容顯示：不裁切圖片 */
+        .img-container-full {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            background: rgba(0,0,0,0.3);
+            display: none;
+        }
+        .img-container-full img {
+            width: 100%;
+            max-height: min(58dvh, 560px);
+            height: auto;
+            object-fit: contain;
+            display: block;
+        }
+
+        .bottom-nav { 
+            position: fixed; 
+            bottom: calc(20px + env(safe-area-inset-bottom)); 
+            left: 50%; 
+            transform: translateX(-50%); 
+            width: 92%; 
+            max-width: 450px; 
+            background: rgba(10, 14, 20, 0.98); 
+            backdrop-filter: saturate(180%) blur(25px); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 28px; 
+            display: none; 
+            grid-template-columns: repeat(2, 1fr); 
+            padding: 14px 0; 
+            z-index: 10000; 
+            box-shadow: 0 -15px 35px rgba(0,0,0,0.8);
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-dim); cursor: pointer; }
+        .nav-item svg { width: 24px; height: 24px; fill: var(--text-dim); }
+        .nav-item.active { color: var(--accent-yellow); }
+        .nav-item.active svg { fill: var(--accent-yellow); }
+
+        /* 序幕與最後任務流程分頁 */
+        .prologue-page { display: none; flex-direction: column; width: 100%; }
+        .prologue-page.active { display: flex; animation: fadeIn 0.5s ease forwards; }
+
+        .story-text-container { font-size: 0.95rem; line-height: 1.8; color: var(--text-white); overflow: visible; }
+        .story-text-container p { margin-bottom: 16px; text-align: justify; white-space: pre-wrap; }
+        .story-highlight { border-left: 3px solid var(--accent-yellow); padding-left: 12px; font-style: italic; color: var(--accent-yellow); margin: 15px 0 !important; }
+
+        .video-container { position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 14px; border: 1px solid var(--glass-border); margin-bottom: 25px; }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* 關卡雷達圖與標題：優化為極簡無背景透明發光質感 */
+        .info-chapter-title { font-size: 3rem; letter-spacing: 8px; font-weight: 300; margin-top: 5%; color: #fff; text-align: center; }
+        .info-mission-box { background: #fff; color: #000; padding: 10px 15px; border-radius: 10px; font-weight: 900; width: 90%; margin: 20px auto; font-size: 1.4rem; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .radar-box { 
+            width: 230px; 
+            height: 230px; 
+            margin: 30px auto; 
+            position: relative; 
+            background: transparent; 
+            border: none; 
+            box-shadow: none; 
+            padding: 10px;
+        }
+        .radar-svg { width: 100%; height: 100%; }
+        .radar-area { fill: rgba(160, 196, 255, 0.4); stroke: #a0c4ff; stroke-width: 2.5; filter: drop-shadow(0 0 6px rgba(160,196,255,0.6)); }
+        
+        /* 顯著放大分析標籤字體 */
+        .radar-label { 
+            position: absolute; 
+            font-size: 1rem; 
+            color: #e0f2fe; 
+            font-weight: 700; 
+            text-shadow: 0 2px 6px rgba(0,0,0,0.95); 
+            white-space: nowrap; 
+        }
+
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.96); z-index: 15000; display: none; padding: 30px; overflow-y: auto; }
+        #resume-dialog, #login-dialog, #date-lock-dialog, #confirm-dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 88%; max-width: 400px; z-index: 20000; display: none; }
+
+        /* ==================== BeachTime 整合新增樣式 ==================== */
+        /* Grid styles */
+        .puzzle-grid-container {
+            position: relative;
+            width: clamp(280px, min(48vw, 62vh), 520px);
+            max-width: 100%;
+            aspect-ratio: 1;
+            margin: 18px auto;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        .puzzle-grid-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: fill;
+            object-position: center;
+            z-index: 0;
+            pointer-events: none;
+            display: block;
+        }
+        .grid-cell {
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background: rgba(10, 15, 29, 0.08);
+            color: rgba(255, 255, 255, 0.35);
+            font-size: 1.4rem;
+            font-weight: 700;
+            user-select: none;
+        }
+        .grid-cell:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .grid-cell.selected {
+            border: 2.5px solid var(--error-red);
+            background: rgba(255, 77, 77, 0.35);
+            color: #fff;
+            text-shadow: 0 0 8px var(--error-red);
+            box-shadow: inset 0 0 15px rgba(255, 77, 77, 0.5);
+        }
+
+        /* Flag card choices */
+        .flag-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .flag-item {
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            border: 1.5px solid rgba(255, 255, 255, 0.15);
+            width: 100%;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            padding: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .flag-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .flag-item.active {
+            border-color: var(--accent-yellow);
+            background: rgba(255, 215, 0, 0.12);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            transform: scale(1.02);
+        }
+        .flag-visual {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 8px;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .flag-label {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #fff;
+            line-height: 1.4;
+        }
+
+        /* CCTV violation scanning */
+        .violation-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/5;
+            max-height: min(58dvh, 560px);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            margin: 15px auto;
+        }
+        .puzzle-image-container {
+            aspect-ratio: auto;
+            max-height: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+        }
+        .puzzle-image-container img {
+            width: 100%;
+            max-height: min(58dvh, 560px);
+            height: auto;
+            object-fit: contain;
+            border-radius: 8px;
+            display: block;
+        }
+        #success-img-box img {
+            max-height: min(34dvh, 360px);
+        }
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(74, 222, 128, 0.7);
+            box-shadow: 0 0 12px rgba(74, 222, 128, 0.9);
+            animation: scan 4s linear infinite;
+            pointer-events: none;
+        }
+        .cctv-overlay-text {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #4ade80;
+            pointer-events: none;
+            letter-spacing: 1px;
+        }
+        .cctv-overlay-rec {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.6);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #ff4d4d;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .rec-dot {
+            width: 8px;
+            height: 8px;
+            background: #ff4d4d;
+            border-radius: 50%;
+            animation: blink 1s steps(5, start) infinite;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            50% { top: 100%; }
+            100% { top: 0%; }
+        }
+        @keyframes blink {
+            to { visibility: hidden; }
+        }
+
+        /* Tide SVGs and choices */
+        .tide-chart-container {
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px;
+            width: 100%;
+            border-radius: 12px;
+            margin: 15px auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .tide-svg-box {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 400/250;
+        }
+        .tide-wave-path {
+            fill: none;
+            stroke: #38bdf8;
+            stroke-width: 3.5;
+            filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.7));
+        }
+        .tide-baseline {
+            stroke: rgba(255, 255, 255, 0.15);
+            stroke-width: 1;
+            stroke-dasharray: 4,4;
+        }
+        .tide-dot {
+            fill: var(--accent-yellow);
+            stroke: #fff;
+            stroke-width: 1.5;
+            filter: drop-shadow(0 0 6px var(--accent-yellow));
+        }
+        .choice-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+            margin-top: 15px;
+        }
+        .choice-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px 18px;
+            text-align: left;
+            transition: all 0.25s ease;
+            font-size: 0.95rem;
+            width: 100%;
+            cursor: pointer;
+            color: #fff;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .choice-btn:hover {
+            background: rgba(255, 255, 255, 0.09);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(3px);
+        }
+        .choice-btn.active {
+            background: var(--accent-yellow);
+            color: #000;
+            font-weight: 700;
+            border-color: #fff;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        /* SOS signal key */
+        .sos-ref-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            text-align: center;
+            margin: 15px auto;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .sos-ref-title {
+            font-size: 0.9rem;
+            color: var(--accent-yellow);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .sos-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        .sos-table th {
+            color: var(--text-dim);
+            padding: 6px;
+            border-bottom: 1.5px solid rgba(255,255,255,0.15);
+            font-weight: normal;
+        }
+        .sos-table td {
+            padding: 8px 6px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            color: #fff;
+        }
+        .sos-symbol {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--accent-yellow);
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+        }
+
+        /* GPS Radar Styles */
+        .gps-widget {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px dashed var(--accent-teal);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin: 15px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--teal-glow);
+        }
+        .gps-radar-ring {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-teal);
+            margin: 10px auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .gps-radar-beam {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, rgba(0, 245, 255, 0.15) 0%, transparent 50%);
+            animation: radar-sweep 3s linear infinite;
+        }
+        .gps-radar-dot {
+            width: 8px;
+            height: 8px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-teal);
+            z-index: 2;
+        }
+        @keyframes radar-sweep {
+            to { transform: rotate(360deg); }
+        }
+        .gps-distance {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--accent-teal);
+            text-shadow: var(--teal-glow);
+            margin-top: 5px;
+        }
+
+        /* Branching buttons */
+        .branch-choice-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .btn-branch-choice {
+            background: linear-gradient(135deg, rgba(11, 37, 69, 0.9) 0%, rgba(19, 64, 116, 0.9) 100%);
+            border: 1px solid var(--accent-gold);
+            color: #fff;
+            padding: 14px 18px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: left;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        .btn-branch-choice:hover {
+            transform: scale(1.02);
+            background: linear-gradient(135deg, rgba(19, 64, 116, 0.9) 0%, rgba(25, 80, 140, 0.9) 100%);
+            box-shadow: var(--gold-glow);
+        }
+
+        /* Sort Puzzle Styles */
+        .sort-list-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 10px;
+            margin: 15px auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .sort-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 12px 15px;
+            cursor: grab;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .sort-item:active {
+            cursor: grabbing;
+            background: rgba(255, 215, 0, 0.1);
+            border-color: var(--accent-yellow);
+            transform: scale(0.98);
+        }
+        .sort-item-handle {
+            color: var(--accent-yellow);
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        .sort-item.sort-item-position-error {
+            border: 2px solid #ff5c5c !important;
+            background: rgba(255, 76, 76, 0.14) !important;
+            box-shadow: 0 0 0 2px rgba(255, 76, 76, 0.12), 0 0 16px rgba(255, 76, 76, 0.28) !important;
+        }
+        .sort-position-status {
+            flex: 0 0 auto;
+            margin-left: auto;
+            padding: 3px 7px;
+            border-radius: 4px;
+            background: rgba(255, 76, 76, 0.18);
+            color: #ff9b9b;
+            border: 1px solid rgba(255, 92, 92, 0.55);
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        /* Drag Match Puzzle Styles */
+        .drag-board-container {
+            background: rgba(0,0,0,0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 10px;
+            margin: 15px auto;
+            width: 100%;
+            text-align: center;
+        }
+        .drag-match-canvas {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4/3;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .drag-zone-target {
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: rgba(255, 215, 0, 0.15);
+            border: 2px dashed var(--accent-yellow);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-yellow);
+            font-size: 0.75rem;
+            font-weight: bold;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+        .drag-zone-target.matched {
+            border-style: solid;
+            background: rgba(76, 175, 80, 0.3);
+            border-color: var(--pass-green);
+            color: #fff;
+            box-shadow: 0 0 15px var(--pass-green);
+        }
+        .drag-movable-item {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: var(--primary-blue);
+            border: 2px solid var(--accent-teal);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            z-index: 10;
+            user-select: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            transform: translate(-50%, -50%);
+        }
+        .drag-movable-item:active {
+            cursor: grabbing;
+            border-color: var(--accent-yellow);
+            box-shadow: var(--gold-glow);
+        }
+
+        /* Player experience visual refresh */
+        :root {
+            --bg-deep: #101820;
+            --card-bg: rgba(23, 34, 43, 0.86);
+            --glass-border: rgba(214, 224, 226, 0.16);
+            --accent-yellow: #d8b66b;
+            --accent-gold: #b99552;
+            --accent-teal: #75b7aa;
+            --accent-blue: #8fc9cf;
+            --text-white: #f4f0e8;
+            --text-dim: #aeb8b6;
+            --pass-green: #7ab98f;
+            --error-red: #d5796e;
+            --gold-glow: 0 8px 22px rgba(216, 182, 107, 0.16);
+            --teal-glow: 0 8px 22px rgba(117, 183, 170, 0.16);
+            --glass-shadow: 0 18px 42px rgba(4, 10, 14, 0.34);
+        }
+
+        body {
+            color: var(--text-white);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(117, 183, 170, 0.13), transparent 34%),
+                radial-gradient(circle at 86% 88%, rgba(216, 182, 107, 0.10), transparent 38%),
+                linear-gradient(135deg, #101820 0%, #15222a 50%, #111a21 100%);
+        }
+
+        .background-container {
+            opacity: 0.34;
+            filter: saturate(0.82) contrast(0.96);
+        }
+
+        .vignette {
+            background:
+                linear-gradient(135deg, rgba(16, 24, 32, 0.62), rgba(16, 24, 32, 0.86)),
+                radial-gradient(circle at center, transparent 0%, rgba(4, 10, 14, 0.62) 78%);
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            box-shadow: var(--glass-shadow);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        #login-dialog,
+        #date-lock-dialog,
+        #resume-dialog,
+        #confirm-dialog {
+            border-radius: 16px;
+        }
+
+        #login-dialog h3,
+        #date-lock-dialog h3,
+        #resume-dialog h3,
+        .mission-header p,
+        .story-highlight,
+        #top-title,
+        #sub-title,
+        #credit-text,
+        .sos-ref-title,
+        .sos-symbol,
+        .sort-item-handle {
+            color: var(--accent-yellow) !important;
+            letter-spacing: 0 !important;
+            text-shadow: none !important;
+        }
+
+        #team-name-input,
+        #date-input,
+        #ans-input {
+            background: rgba(16, 24, 32, 0.72) !important;
+            border-color: rgba(214, 224, 226, 0.14) !important;
+            color: var(--text-white) !important;
+            box-shadow: none !important;
+        }
+
+        #team-name-input:focus,
+        #date-input:focus,
+        #ans-input:focus {
+            outline: none;
+            border-color: rgba(117, 183, 170, 0.55) !important;
+            box-shadow: 0 0 0 3px rgba(117, 183, 170, 0.12) !important;
+        }
+
+        .btn-action {
+            background: linear-gradient(135deg, rgba(117, 183, 170, 0.98), rgba(143, 201, 207, 0.9)) !important;
+            color: #102027 !important;
+            border: 1px solid rgba(143, 201, 207, 0.34) !important;
+            border-radius: 12px;
+            box-shadow: var(--teal-glow) !important;
+            letter-spacing: 0 !important;
+        }
+
+        .btn-action:hover,
+        .btn-action:active {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(117, 183, 170, 0.18) !important;
+        }
+
+        .btn-action[style*="transparent"],
+        .btn-back,
+        .quest-tab {
+            background: rgba(244, 240, 232, 0.035) !important;
+            border: 1px solid rgba(214, 224, 226, 0.14) !important;
+            color: var(--text-white) !important;
+            box-shadow: none !important;
+        }
+
+        .btn-back:active,
+        .btn-back:hover,
+        .quest-tab:hover {
+            background: rgba(117, 183, 170, 0.08) !important;
+            border-color: rgba(117, 183, 170, 0.28) !important;
+            color: var(--accent-blue) !important;
+        }
+
+        #tab-main-quests.active,
+        #tab-side-quests.active {
+            background: rgba(117, 183, 170, 0.12) !important;
+            border-color: rgba(117, 183, 170, 0.34) !important;
+            color: var(--accent-blue) !important;
+            box-shadow: none !important;
+        }
+
+        .mission-header {
+            border-left-color: var(--accent-teal);
+        }
+
+        .mission-header h2,
+        #main-title,
+        .info-chapter-title,
+        .success-title {
+            letter-spacing: 0 !important;
+            text-shadow: none !important;
+        }
+
+        .mission-card,
+        .mission-card.quest-main,
+        .mission-card.quest-side {
+            background: rgba(23, 34, 43, 0.74) !important;
+            border-color: rgba(214, 224, 226, 0.14) !important;
+            border-radius: 14px;
+            box-shadow: 0 12px 28px rgba(4, 10, 14, 0.26) !important;
+            animation: none !important;
+        }
+
+        .mission-card.available {
+            background: rgba(117, 183, 170, 0.09) !important;
+            border-color: rgba(117, 183, 170, 0.32) !important;
+        }
+
+        .mission-card.passed {
+            opacity: 0.72;
+            filter: none;
+            background: rgba(122, 185, 143, 0.07) !important;
+        }
+
+        .mission-card.locked {
+            opacity: 0.36;
+        }
+
+        .card-status,
+        #lv-info-stars,
+        .next-arrow {
+            color: var(--accent-yellow) !important;
+        }
+
+        .bottom-nav {
+            background: rgba(16, 24, 32, 0.94);
+            border-color: rgba(214, 224, 226, 0.14);
+            border-radius: 22px;
+            box-shadow: 0 -12px 28px rgba(4, 10, 14, 0.38);
+        }
+
+        .nav-item.active,
+        .nav-item.active svg {
+            color: var(--accent-blue);
+            fill: var(--accent-blue);
+        }
+
+        .img-container-full,
+        .video-container,
+        .puzzle-grid-container,
+        .violation-container,
+        .tide-chart-container,
+        .sos-ref-container,
+        .sort-list-container,
+        .drag-board-container {
+            background: rgba(16, 24, 32, 0.62);
+            border-color: rgba(214, 224, 226, 0.14);
+            box-shadow: 0 10px 24px rgba(4, 10, 14, 0.28);
+        }
+
+        .grid-cell.selected {
+            border-color: rgba(213, 121, 110, 0.85);
+            background: rgba(213, 121, 110, 0.28);
+            text-shadow: none;
+            box-shadow: inset 0 0 12px rgba(213, 121, 110, 0.28);
+        }
+
+        .flag-item,
+        .choice-btn,
+        .sort-item,
+        .btn-branch-choice {
+            background: rgba(244, 240, 232, 0.04) !important;
+            border-color: rgba(214, 224, 226, 0.14) !important;
+            color: var(--text-white) !important;
+            box-shadow: none !important;
+        }
+
+        .flag-item:hover,
+        .choice-btn:hover,
+        .sort-item:hover,
+        .btn-branch-choice:hover {
+            background: rgba(117, 183, 170, 0.08) !important;
+            border-color: rgba(117, 183, 170, 0.28) !important;
+            transform: translateY(-1px);
+        }
+
+        .flag-item.active,
+        .choice-btn.active {
+            background: rgba(117, 183, 170, 0.16) !important;
+            color: var(--text-white) !important;
+            border-color: rgba(117, 183, 170, 0.48) !important;
+            box-shadow: 0 8px 20px rgba(117, 183, 170, 0.12) !important;
+        }
+
+        .tide-wave-path {
+            stroke: var(--accent-blue);
+            filter: drop-shadow(0 6px 12px rgba(143, 201, 207, 0.24));
+        }
+
+        .tide-dot {
+            fill: var(--accent-yellow);
+            filter: drop-shadow(0 6px 12px rgba(216, 182, 107, 0.20));
+        }
+
+        .gps-widget {
+            background: rgba(16, 24, 32, 0.70);
+            border-color: rgba(117, 183, 170, 0.34);
+            box-shadow: none;
+        }
+
+        .gps-radar-beam {
+            background: conic-gradient(from 0deg, rgba(117, 183, 170, 0.16) 0%, transparent 50%);
+        }
+
+        .gps-distance,
+        #gps-status-text {
+            color: var(--accent-blue) !important;
+            text-shadow: none !important;
+            letter-spacing: 0 !important;
+        }
+
+        .scan-line {
+            background: rgba(122, 185, 143, 0.68);
+            box-shadow: 0 0 12px rgba(122, 185, 143, 0.48);
+        }
+
+        .cctv-overlay-text {
+            color: var(--pass-green);
+        }
+
+        .cctv-overlay-rec {
+            color: var(--error-red);
+        }
+
+        .rec-dot {
+            background: var(--error-red);
+        }
+
+        .pass-stamp-mini {
+            border-color: var(--pass-green);
+            color: var(--pass-green);
+        }
+
+        #puzzle-error,
+        #login-error,
+        #date-error {
+            background: rgba(213, 121, 110, 0.10);
+            border: 1px solid rgba(213, 121, 110, 0.28);
+            border-radius: 10px;
+            padding: 10px 12px;
+            color: var(--error-red) !important;
+        }
+
+        .story-text-container {
+            color: var(--text-white);
+        }
+
+        .info-mission-box {
+            background: rgba(244, 240, 232, 0.92);
+            color: #102027;
+            box-shadow: 0 10px 24px rgba(4, 10, 14, 0.28);
+        }
+
+        .radar-area {
+            fill: rgba(117, 183, 170, 0.34);
+            stroke: var(--accent-blue);
+            filter: drop-shadow(0 6px 12px rgba(143, 201, 207, 0.24));
+        }
+
+        .radar-label {
+            color: var(--text-white);
+            text-shadow: 0 2px 8px rgba(4, 10, 14, 0.82);
+        }
+
+        .drag-zone-target {
+            background: rgba(216, 182, 107, 0.12);
+            border-color: rgba(216, 182, 107, 0.54);
+            color: var(--accent-yellow);
+            box-shadow: 0 8px 18px rgba(4, 10, 14, 0.22);
+        }
+
+        .drag-movable-item {
+            background: rgba(23, 34, 43, 0.92);
+            border-color: rgba(117, 183, 170, 0.54);
+            box-shadow: 0 8px 18px rgba(4, 10, 14, 0.28);
+        }
+
+        #loading-screen h1,
+        #loading-screen p,
+        #main-screen p,
+        #main-screen b,
+        .prologue-page h2,
+        [style*="letter-spacing"] {
+            letter-spacing: 0 !important;
+        }
+
+        #progress-bar {
+            stroke: var(--accent-teal) !important;
+        }
+
+        #percent-val,
+        #loading-screen div[style*="color:var(--accent-yellow)"] {
+            color: var(--accent-blue) !important;
+        }
+
+        #main-screen > div:nth-child(2) {
+            border-color: rgba(117, 183, 170, 0.28) !important;
+            background: rgba(117, 183, 170, 0.035);
+            box-shadow: 0 14px 32px rgba(4, 10, 14, 0.24);
+        }
+
+        #main-screen > div:nth-child(2) > div {
+            background: rgba(16, 24, 32, 0.72) !important;
+            border-color: rgba(117, 183, 170, 0.46) !important;
+        }
+
+        #final-success-screen .glass-card > div[style*="76, 175, 80"],
+        #final-summary-screen .glass-card > div[style*="255, 215, 0"] {
+            background: rgba(117, 183, 170, 0.10) !important;
+            border-color: rgba(117, 183, 170, 0.30) !important;
+            color: var(--accent-blue) !important;
+            letter-spacing: 0 !important;
+        }
+
+        #summary-title-text,
+        #success-title-text,
+        #overlay-archive-title {
+            color: var(--accent-yellow) !important;
+        }
+
+        .overlay {
+            background: rgba(8, 14, 19, 0.92);
+        }
+
+        .drag-zone-target.matched {
+            background: rgba(122, 185, 143, 0.24);
+            border-color: rgba(122, 185, 143, 0.72);
+            box-shadow: 0 8px 18px rgba(4, 10, 14, 0.22);
+        }
+
+        .drag-movable-item:active {
+            border-color: rgba(216, 182, 107, 0.72);
+            box-shadow: 0 8px 18px rgba(4, 10, 14, 0.28);
+        }
+
+        @media (max-width: 640px) {
+            #main-title {
+                font-size: 2.35rem !important;
+            }
+            #login-dialog,
+            #date-lock-dialog,
+            #resume-dialog,
+            #confirm-dialog {
+                width: 92%;
+            }
+            .mission-card {
+                padding: 18px;
+            }
+            .choice-btn {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+    </style>
 </head>
 <body>
-  <main class="app" id="app" aria-live="polite"></main>
-  <script src="game-data.js"></script>
-  <script>
-    (() => {
-      const game = window.TIDEMARK_GAME;
-      const app = document.getElementById('app');
-      const storageKey = `tidemark-static-progress-${game.version}`;
-      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-      let state = loadState();
-      let selectedAnswer = '';
-      let drawerOpen = false;
 
-      document.documentElement.style.setProperty('--page-bg', `url("${safeUrl(game.config.bgUrl)}")`);
+    <div class="background-container" id="bg-layer"></div>
+    <div class="vignette"></div>
 
-      function safeUrl(value) {
-        return String(value || '').replace(/["'<>]/g, '');
-      }
-      function escapeHtml(value) {
-        return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
-      }
-      function plainText(value) {
-        const holder = document.createElement('div');
-        holder.innerHTML = String(value || '').replace(/<br\s*\/?>(\s*)/gi, '\n').replace(/<\/div>/gi, '\n');
-        return holder.textContent.replace(/\n{3,}/g, '\n\n').trim();
-      }
-      function toHtml(value) { return escapeHtml(plainText(value)).replace(/\n/g, '<br>'); }
-      function loadState() {
-        try {
-          const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
-          if (saved && Array.isArray(saved.completed)) return saved;
-        } catch (_) {}
-        return { teamName:'', completed:[], hints:{}, currentId:null, startedAt:null, introSeen:false, endedAt:null };
-      }
-      function saveState() { localStorage.setItem(storageKey, JSON.stringify(state)); }
-      function enabledPuzzles() { return game.puzzles.filter(puzzle => puzzle.enabled !== false); }
-      function isUnlocked(puzzle) {
-        if (state.completed.includes(puzzle.id)) return true;
-        if (puzzle.dependsOn === undefined || puzzle.dependsOn === null || puzzle.dependsOn === '') return true;
-        if (puzzle.dependsOn === 'all') return enabledPuzzles().filter(item => item.id !== puzzle.id).every(item => state.completed.includes(item.id));
-        return state.completed.includes(Number(puzzle.dependsOn));
-      }
-      function currentPuzzle() {
-        const available = enabledPuzzles();
-        return available.find(item => item.id === state.currentId) || available.find(item => isUnlocked(item) && !state.completed.includes(item.id)) || available[available.length - 1];
-      }
-      function nextPuzzle() { return enabledPuzzles().find(item => !state.completed.includes(item.id) && isUnlocked(item)); }
-      function allComplete() { return enabledPuzzles().every(item => state.completed.includes(item.id)); }
-      function progressPercent() { const total = enabledPuzzles().length || 1; return Math.round(state.completed.length / total * 100); }
-      function image(url, alt) { return url ? `<img class="art" src="${safeUrl(url)}" alt="${escapeHtml(alt)}" loading="lazy">` : ''; }
-      function render() {
-        if (!state.teamName) return renderWelcome();
-        if (!state.introSeen) return renderIntro();
-        if (allComplete()) return renderFinale();
-        renderMission();
-      }
-      function renderWelcome() {
-        const config = game.config;
-        app.innerHTML = `<section class="hero"><div class="welcome">
-          ${config.logoUrl ? `<img class="logo" src="${safeUrl(config.logoUrl)}" alt="${escapeHtml(config.titleMain)}">` : ''}
-          <p class="eyebrow">${escapeHtml(config.titleTop || '實境解謎') }</p>
-          <h1>${escapeHtml(config.titleMain || game.name)}</h1>
-          <p class="sub">${escapeHtml(config.regSubtitle || config.titleSub || '')}</p>
-          <p class="intro">${toHtml(config.regDesc || '完成訓練，找回地方留下的六道殘響。')}</p>
-          <div class="panel setup">
-            <label for="team-name">${escapeHtml(config.regTeamNameLabel || '隊伍名稱')}</label>
-            <input id="team-name" maxlength="40" autocomplete="nickname" placeholder="${escapeHtml(config.regTeamNamePlaceholder || '輸入隊伍名稱')}" value="">
-            <p class="notice">此版本完全由 GitHub Pages 提供。進度只會保存在這支手機的瀏覽器內。</p>
-            <p class="error" id="setup-error"></p>
-            <div class="button-row"><button class="btn btn-gold" id="start-game">開始訓練</button></div>
-          </div>
-        </div></section>`;
-        document.getElementById('start-game').addEventListener('click', () => {
-          const name = document.getElementById('team-name').value.trim();
-          if (!name) { document.getElementById('setup-error').textContent = '請先輸入隊伍名稱。'; return; }
-          state.teamName = name; state.startedAt = Date.now(); state.introSeen = !(game.config.prologuePages || []).length; saveState(); render();
-        });
-      }
-      function renderIntro() {
-        const pages = game.config.prologuePages || [];
-        const index = Math.max(0, Math.min(Number(state.introIndex || 0), pages.length - 1));
-        const page = pages[index] || {};
-        app.innerHTML = `<section class="hero"><div class="welcome"><p class="eyebrow">訓練前紀錄 ${index + 1} / ${pages.length}</p><div class="panel story-card">
-          <h1>${escapeHtml(page.title || game.name)}</h1>${image(page.image, page.title || '序章圖片')}<p class="story">${toHtml(page.text || '')}</p>
-          <div class="button-row"><button class="btn btn-secondary" id="skip-intro">略過序章</button><button class="btn btn-gold" id="next-intro">${index === pages.length - 1 ? '進入任務' : '下一頁'}</button></div>
-        </div></div></section>`;
-        document.getElementById('skip-intro').onclick = () => { state.introSeen = true; delete state.introIndex; saveState(); render(); };
-        document.getElementById('next-intro').onclick = () => { if (index >= pages.length - 1) { state.introSeen = true; delete state.introIndex; } else state.introIndex = index + 1; saveState(); render(); };
-      }
-      function renderTopbar() {
-        return `<header class="topbar"><div class="brand"><strong>${escapeHtml(game.name)}</strong><span>${escapeHtml(state.teamName)} · ${state.completed.length} / ${enabledPuzzles().length} 已完成</span></div><button class="icon-button" id="mission-menu" aria-label="任務列表">☰</button></header><div class="progress"><span style="width:${progressPercent()}%"></span></div>`;
-      }
-      function renderMission() {
-        const puzzle = currentPuzzle();
-        if (!puzzle) return renderFinale();
-        const hintCount = Number(state.hints[puzzle.id] || 0);
-        const hints = (puzzle.hints || []).slice(0, hintCount);
-        const storyBlocks = (puzzle.story || []).map((item, index) => `<div class="panel story-card"><p class="story">${toHtml(item)}</p>${image((puzzle.storyImg || [])[index], `${puzzle.name} 故事圖`)}</div>`).join('');
-        const options = puzzle.puzzleType === 'choice' ? `<div class="choices">${(puzzle.puzzleOptions || []).map((option, index) => `<button class="choice ${selectedAnswer === letters[index] ? 'selected' : ''}" data-answer="${letters[index]}"><span class="choice-letter">${letters[index]}</span><span>${escapeHtml(option.label || option)}</span></button>`).join('')}</div>` : `<input id="text-answer" placeholder="${escapeHtml(puzzle.inputPlaceholder || '輸入答案')}" value="${escapeHtml(selectedAnswer)}">`;
-        app.innerHTML = `${renderTopbar()}<section class="stage">
-          <div class="mission-heading"><p class="chapter">${escapeHtml(puzzle.chapter || `MISSION ${puzzle.id}`)}</p><h1>${escapeHtml(puzzle.name)}</h1></div>
-          ${storyBlocks}
-          ${puzzle.landmarkImg ? `<div class="panel story-card"><h3>${escapeHtml(plainText(puzzle.landmarkText) || '現地線索')}</h3>${image(puzzle.landmarkImg, `${puzzle.name} 現地線索`)}</div>` : ''}
-          <div class="panel story-card"><p class="question">${toHtml(puzzle.puzzleDesc)}</p>${image(puzzle.puzzleImg, `${puzzle.name} 題目圖片`)}${options}
-            <div class="button-row"><button class="btn btn-gold" id="submit-answer">${escapeHtml(puzzle.submitBtnText || '送出答案')}</button>${hintCount < (puzzle.hints || []).length ? '<button class="btn btn-secondary" id="show-hint">查看提示</button>' : ''}</div>
-            <div class="hint-list">${hints.map(hint => `<div class="hint">${toHtml(hint)}</div>`).join('')}</div><p class="answer-feedback" id="answer-feedback"></p>
-          </div>
-        </section>${renderDrawer()}`;
-        document.getElementById('mission-menu').onclick = () => { drawerOpen = true; renderMission(); };
-        document.querySelectorAll('.choice').forEach(button => button.onclick = () => { selectedAnswer = button.dataset.answer; renderMission(); });
-        document.getElementById('show-hint')?.addEventListener('click', () => { state.hints[puzzle.id] = hintCount + 1; saveState(); renderMission(); });
-        document.getElementById('submit-answer').onclick = () => submitAnswer(puzzle);
-        document.getElementById('text-answer')?.addEventListener('keydown', event => { if (event.key === 'Enter') submitAnswer(puzzle); });
-        bindDrawer();
-      }
-      function renderDrawer() {
-        if (!drawerOpen) return '';
-        const items = enabledPuzzles().map(puzzle => {
-          const done = state.completed.includes(puzzle.id); const unlocked = isUnlocked(puzzle); const current = currentPuzzle()?.id === puzzle.id;
-          return `<button class="mission-item ${done ? 'done' : ''} ${current ? 'current' : ''}" data-mission-id="${puzzle.id}" ${unlocked ? '' : 'disabled'}><span class="mission-number">${escapeHtml(puzzle.chapter || String(puzzle.id))}</span><span class="mission-name">${escapeHtml(puzzle.name)}<small>${done ? '已完成' : unlocked ? '可進行' : '尚未解鎖'}</small></span><span class="badge ${unlocked ? '' : 'locked'}">${done ? '完成' : unlocked ? '進入' : '鎖定'}</span></button>`;
-        }).join('');
-        return `<div class="mission-sheet" id="mission-sheet"><section class="mission-drawer"><div class="drawer-head"><h2>任務列表</h2><button class="icon-button" id="close-drawer" aria-label="關閉">×</button></div><div class="mission-list">${items}</div><div class="button-row"><button class="btn btn-danger" id="reset-progress">清除本機進度</button></div></section></div>`;
-      }
-      function bindDrawer() {
-        document.getElementById('close-drawer')?.addEventListener('click', () => { drawerOpen = false; renderMission(); });
-        document.getElementById('mission-sheet')?.addEventListener('click', event => { if (event.target.id === 'mission-sheet') { drawerOpen = false; renderMission(); } });
-        document.querySelectorAll('[data-mission-id]').forEach(button => button.addEventListener('click', () => { state.currentId = Number(button.dataset.missionId); selectedAnswer = ''; drawerOpen = false; saveState(); renderMission(); }));
-        document.getElementById('reset-progress')?.addEventListener('click', () => { if (window.confirm('只會清除這支手機的遊戲進度，確定要重來嗎？')) { localStorage.removeItem(storageKey); state = loadState(); selectedAnswer = ''; drawerOpen = false; render(); } });
-      }
-      function normalized(value) { return String(value || '').trim().toUpperCase().replace(/\s+/g, ''); }
-      function submitAnswer(puzzle) {
-        const raw = puzzle.puzzleType === 'choice' ? selectedAnswer : document.getElementById('text-answer')?.value || '';
-        const answers = [puzzle.answer, ...(Array.isArray(puzzle.answers) ? puzzle.answers : [])].map(normalized).filter(Boolean);
-        const feedback = document.getElementById('answer-feedback');
-        if (!raw) { feedback.textContent = '請先選擇或輸入答案。'; return; }
-        if (!answers.includes(normalized(raw))) { feedback.textContent = plainText(puzzle.errorMsg || '答案尚未正確，請再觀察一次。'); return; }
-        if (!state.completed.includes(puzzle.id)) state.completed.push(puzzle.id);
-        state.currentId = puzzle.id; saveState(); selectedAnswer = ''; renderPassed(puzzle);
-      }
-      function renderPassed(puzzle) {
-        const next = nextPuzzle();
-        app.innerHTML = `${renderTopbar()}<section class="stage"><div class="panel success story-card"><p class="chapter">紀錄已確認</p><h1>${escapeHtml(puzzle.name)}</h1>${image(puzzle.postStoryImg, `${puzzle.name} 完成圖`)}<p class="story">${toHtml(puzzle.postStory || '關卡完成。')}</p>${puzzle.totemDesc ? `<p class="totem">${toHtml(puzzle.totemDesc)}</p>` : ''}${image(puzzle.totemImg, `${puzzle.name} 殘響卡`)}<div class="button-row"><button class="btn btn-gold" id="continue">${allComplete() ? '查看完成紀錄' : escapeHtml(puzzle.postStoryBtnText || '下一個任務')}</button><button class="btn btn-secondary" id="open-list">任務列表</button></div></div></section>`;
-        document.getElementById('continue').onclick = () => { if (allComplete()) renderFinale(); else { state.currentId = next?.id || null; saveState(); renderMission(); } };
-        document.getElementById('open-list').onclick = () => { drawerOpen = true; renderMission(); };
-      }
-      function renderFinale() {
-        state.endedAt = state.endedAt || Date.now(); saveState();
-        const config = game.config; const completedDate = new Intl.DateTimeFormat('zh-TW', { year:'numeric', month:'long', day:'numeric' }).format(new Date(state.endedAt));
-        app.innerHTML = `${renderTopbar()}<section class="stage finale"><div class="panel story-card"><p class="eyebrow">TRAINING COMPLETE</p><h1>${escapeHtml(config.successTitle || '訓練完成')}</h1>${image(config.successImg, '六張殘響卡') }<p class="story">${toHtml(config.successStory || config.endingPerfectStory || '你已完成所有訓練。')}</p></div><article class="certificate"><h2>新人受訓完成證書</h2><p>茲證明</p><div class="team">${escapeHtml(state.teamName)}</div><p>已完成「絕對傳奇：潮痕試煉」全部實地訓練，並成功記錄六道地方殘響。</p><p class="certificate-meta">完成日期：${escapeHtml(completedDate)}<br>BD-07 訓練紀錄</p></article><div class="button-row"><button class="btn btn-secondary" id="open-list">查看任務紀錄</button></div><p class="footer-note">本頁進度僅儲存在目前裝置的瀏覽器。</p></section>${renderDrawer()}`;
-        document.getElementById('mission-menu').onclick = () => { drawerOpen = true; renderFinale(); };
-        document.getElementById('open-list').onclick = () => { drawerOpen = true; renderFinale(); };
-        bindDrawer();
-      }
-      render();
-    })();
-  </script>
+    <!-- 探險隊登記與登入 (新增) -->
+    <div id="login-dialog" class="glass-card" style="text-align: center;">
+        <h3 style="color: var(--accent-yellow); margin-bottom: 12px; letter-spacing: 2px;">探險隊登入</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 20px; color: var(--text-dim); line-height: 1.6;">請輸入隊伍名稱，以啟動「潮痕試煉」探險旅程：</p>
+        <input type="text" id="team-name-input" maxlength="40" autocomplete="nickname" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; text-align: center; border-radius: 12px; margin-bottom: 20px; font-size: 1.2rem; letter-spacing: 1px;" placeholder="請輸入隊伍名稱">
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action" style="flex: 1;" onclick="submitStaticLogin()">開始探險 ➔</button>
+                <button class="btn-action" style="flex: 0.5; background: transparent; border: 1px solid var(--glass-border); color: white;" onclick="closeLoginDialog()">取消</button>
+            </div>
+        </div>
+        <p id="login-error" style="color: var(--error-red); display: none; text-align: center; margin-top: 15px; font-size: 0.85rem; font-weight: bold;">請先輸入隊伍名稱。</p>
+    </div>
+
+    <!-- 時空同步定位驗證鎖 -->
+    <div id="date-lock-dialog" class="glass-card" style="text-align: center;">
+        <h3 style="color: var(--accent-yellow); margin-bottom: 12px; letter-spacing: 2px;">時空同步定位</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 20px; color: var(--text-dim); line-height: 1.6;">請輸入今日時空定位金鑰（今日日期，如 0524）：</p>
+        <input type="text" id="date-input" style="width: 100%; padding: 12px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: white; text-align: center; border-radius: 12px; margin-bottom: 20px; font-size: 1.2rem;" placeholder="請輸入 4 碼數字">
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-action" style="flex: 1;" onclick="verifyDateCode()">驗證金鑰</button>
+            <button class="btn-action" style="flex: 1; background: transparent; border: 1px solid var(--glass-border); color: white;" onclick="closeDateLock()">取消</button>
+        </div>
+        <p id="date-error" style="color: var(--error-red); display: none; text-align: center; margin-top: 15px; font-size: 0.85rem;">金鑰校準失敗，請確認日期格式是否正確。</p>
+    </div>
+
+    <!-- 中斷紀錄偵測 -->
+    <div id="resume-dialog" class="glass-card" style="text-align: center;">
+        <h3 style="color: var(--accent-yellow); margin-bottom: 12px;">中斷紀錄偵測</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 25px; color: var(--text-dim); line-height: 1.5;">系統發現您先前留下的探險紀錄，是否要恢復任務流程？</p>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-action" style="flex: 1;" onclick="resumeGame()">繼續進度</button>
+            <button class="btn-action" style="flex: 1; background: transparent; border: 1px solid var(--glass-border); color: white;" onclick="discardAndStart()">重新開始</button>
+        </div>
+    </div>
+
+    <!-- 自訂重置對話框 -->
+    <div id="confirm-dialog" class="glass-card" style="text-align: center;">
+        <h3 style="color: var(--error-red); margin-bottom: 12px; letter-spacing: 2px;">確認重置進度</h3>
+        <p style="font-size: 0.9rem; margin-bottom: 25px; color: var(--text-dim); line-height: 1.6;">確定要重置進度嗎？所有已通過的任務紀錄（PASS）將會被永久清除。</p>
+        <div style="display: flex; gap: 10px;">
+            <button class="btn-action" style="flex: 1; background: var(--error-red); color: white;" onclick="executeReset()">確定重置</button>
+            <button class="btn-action" style="flex: 1; background: transparent; border: 1px solid var(--glass-border); color: white;" onclick="closeConfirmDialog()">取消</button>
+        </div>
+    </div>
+
+    <!-- 1. 載入畫面 -->
+    <section id="loading-screen" class="screen active" style="justify-content: center; align-items: center; text-align: center;">
+        <div id="loader-logo-container" style="display:none; margin-bottom: 30px;">
+            <img id="loader-logo" src="" style="max-height: 90px; width: auto; object-fit: contain; filter: drop-shadow(0 0 12px rgba(255,215,0,0.25));">
+        </div>
+        <div style="margin-bottom: 50px;">
+            <h1 style="font-size: 2.4rem; letter-spacing: 12px; font-weight: 300;">LOADING</h1>
+            <p style="color: var(--accent-yellow); font-size: 0.75rem; letter-spacing: 5px; margin-top: 15px;">AUTHENTICATING PORTAL</p>
+        </div>
+        <div style="position:relative; display:flex; align-items:center; justify-content:center;">
+            <svg width="110" height="110" style="transform: rotate(-90deg);">
+                <circle style="fill:none; stroke:rgba(255,255,255,0.08); stroke-width:5;" cx="55" cy="55" r="50"></circle>
+                <circle id="progress-bar" style="fill:none; stroke:var(--accent-yellow); stroke-width:5; stroke-linecap:round; stroke-dasharray:314; stroke-dashoffset:314; transition:0.1s;" cx="55" cy="55" r="50"></circle>
+            </svg>
+            <div style="position:absolute; color:var(--accent-yellow); font-weight:bold; font-size: 1.2rem;"><span id="percent-val">0</span>%</div>
+        </div>
+    </section>
+
+    <!-- 2. 主畫面 -->
+    <section id="main-screen" class="screen" style="justify-content: space-around; align-items: center; text-align: center;">
+        <div class="hero-info">
+            <div id="logo-container" style="display:none; margin-bottom: 25px;">
+                <img id="main-logo" src="" style="max-height: 130px; width: auto; object-fit: contain; filter: drop-shadow(0 0 20px rgba(255,215,0,0.3));">
+            </div>
+            <p id="top-title" style="color:var(--accent-yellow); font-size:0.8rem; letter-spacing:6px; margin-bottom: 5px;">絕對傳奇</p>
+            <h1 id="main-title" style="font-size:3rem; font-weight:700; text-shadow: 0 0 25px rgba(0,0,0,0.9);">杜勒日記</h1>
+            <p id="sub-title" style="font-size: 0.75rem; color: var(--accent-yellow); text-transform: uppercase; letter-spacing: 3px; opacity: 0.8;">Legend of Absolutus • dulles' Diary</p>
+        </div>
+        <div style="width: 150px; height: 150px; border: 1px solid rgba(255,215,0,0.3); border-radius: 50%; display: flex; justify-content: center; align-items: center;">
+            <div style="width: 120px; height: 120px; background: rgba(0,0,0,0.6); border: 2px solid var(--accent-yellow); border-radius: 50%; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer;" onclick="startNewJourney()">
+                <svg width="45" height="45" viewBox="0 0 24 24" fill="var(--accent-yellow)"><path d="M8 5v14l11-7z"/></svg>
+                <b style="letter-spacing:1px; margin-top:5px; font-size: 0.95rem; color:#fff;">Enter the gate</b>
+            </div>
+        </div>
+        <div>
+            <p id="credit-text" style="color:var(--accent-yellow); font-size:0.75rem; letter-spacing:3px; opacity:0.6; margin-bottom: 8px;">嘿路島民工作室製作</p>
+            <p style="color:var(--pass-green); font-size:0.75rem; letter-spacing:3px;">● PORT SIGNAL SECURED</p>
+        </div>
+    </section>
+
+    <!-- 3. 序幕 (四階流暢翻頁) -->
+    <section id="prologue-screen" class="screen">
+        <!-- 序幕分頁容器，將由 JavaScript 動態生成與置換 -->
+        <div id="prologue-pages-container"></div>
+    </section>
+
+    <!-- 4. 任務列表 -->
+    <section id="mission-screen" class="screen">
+        <div class="mission-header">
+            <p id="mission-header-kicker">Tidemark Log</p>
+            <h2 id="mission-header-title">絕對傳奇：潮痕試煉</h2>
+        </div>
+        <!-- 任務分類切換頁籤 (Tab Bar) -->
+        <div class="quest-tabs" style="display: flex; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); padding: 4px; border-radius: 20px; margin-bottom: 20px; gap: 4px; width: 100%; max-width: 480px; margin-left: auto; margin-right: auto; box-sizing: border-box;">
+            <button id="tab-main-quests" class="quest-tab active" onclick="switchQuestTab('main')" style="flex: 1; border: none; background: transparent; color: rgba(255,255,255,0.6); padding: 10px 16px; border-radius: 16px; font-weight: bold; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>🌊</span> 浪紋航程
+            </button>
+            <button id="tab-side-quests" class="quest-tab" onclick="switchQuestTab('side')" style="flex: 1; border: none; background: transparent; color: rgba(255,255,255,0.6); padding: 10px 16px; border-radius: 16px; font-weight: bold; font-size: 0.85rem; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>🗺️</span> 藏圖暗記
+            </button>
+        </div>
+        <div id="mission-list-container"></div>
+
+    </section>
+
+    <!-- 5. 關卡資訊 -->
+    <section id="lv-info-screen" class="screen">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-back" onclick="prevLevelStep()" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                任務列表
+            </button>
+        </div>
+        <h2 id="lv-info-chapter" class="info-chapter-title">任務一</h2>
+        <div id="lv-info-name" class="info-mission-box">入口的老約定</div>
+        
+        <!-- 單層極簡發光雷達圖 -->
+        <div class="radar-box">
+            <svg class="radar-svg" viewBox="0 0 100 100">
+                <polygon points="50,10 85,30 85,70 50,90 15,70 15,30" fill="none" stroke="rgba(160,196,255,0.25)" stroke-width="1.5" />
+                <polygon id="radar-shape" class="radar-area" points="" />
+            </svg>
+            <div class="radar-label" style="top:-10%; left:50%; transform:translateX(-50%);">邏輯推理</div>
+            <div class="radar-label" style="top:22%; right:-15%;">互動操作</div>
+            <div class="radar-label" style="bottom:22%; right:-15%;">觀察探索</div>
+            <div class="radar-label" style="bottom:-10%; left:50%; transform:translateX(-50%);">判讀理解</div>
+            <div class="radar-label" style="bottom:22%; left:-15%;">情報整合</div>
+            <div class="radar-label" style="top:22%; left:-15%;">情報搜查</div>
+        </div>
+        <div id="lv-info-stars" style="text-align:center; color:var(--accent-yellow); margin-bottom:25px; font-size:2rem;"></div>
+        <button class="btn-action" style="display:block; margin:0 auto; padding:14px 60px; border-radius:14px;" onclick="nextLevelStep()">START MISSION</button>
+    </section>
+
+    <!-- 6. 劇情區 -->
+    <section id="lv-story-screen" class="screen">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-back" onclick="prevLevelStep()" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                回到上一頁
+            </button>
+            <button class="btn-back" onclick="navigateTo('mission-screen')" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                任務列表
+            </button>
+        </div>
+        <div class="glass-card">
+            <div id="lv-story-img-box" class="img-container-full"><img id="lv-story-img" src=""></div>
+            <div id="lv-story-text" style="line-height:2; font-size: 1rem; text-align: justify; white-space: pre-wrap;"></div>
+            <div class="next-arrow" onclick="nextStoryPage()">➔</div>
+        </div>
+    </section>
+
+    <!-- 7. 地標引導頁 -->
+    <section id="lv-landmark-screen" class="screen">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-back" onclick="prevLevelStep()" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                回到上一頁
+            </button>
+            <button class="btn-back" onclick="navigateTo('mission-screen')" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                任務列表
+            </button>
+        </div>
+        <div class="glass-card" style="margin-top:auto;">
+            <div id="lv-landmark-img-box" class="img-container-full" style="display:block;"><img id="lv-landmark-img" src=""></div>
+            <p id="lv-landmark-text" style="font-size:0.95rem; line-height:1.6; margin-bottom: 20px; white-space: pre-wrap;"></p>
+            <button id="lv-landmark-btn" class="btn-action" style="width:100%;" onclick="nextLevelStep()"></button>
+        </div>
+    </section>
+
+    <!-- 8. 謎題驗證頁 -->
+    <section id="lv-puzzle-screen" class="screen">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-back" onclick="prevLevelStep()" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                回到上一頁
+            </button>
+            <button class="btn-back" onclick="navigateTo('mission-screen')" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                任務列表
+            </button>
+        </div>
+        <div class="glass-card">
+            <p id="lv-puzzle-desc" style="margin-bottom:15px; font-weight: 700; white-space: pre-wrap;"></p>
+            <div id="custom-puzzle-container"></div>
+            <div id="puzzle-hint-box" style="display:none; margin: 14px 0 18px; padding: 14px; border: 1px solid rgba(0,229,255,0.22); border-radius: 12px; background: rgba(0,229,255,0.06);">
+                <button type="button" id="puzzle-hint-btn" class="btn-back" style="margin-bottom: 10px;" onclick="showNextPuzzleHint()">查看提示</button>
+                <div id="puzzle-hint-list" style="display:flex; flex-direction:column; gap:8px; font-size:0.9rem; color:var(--text-white); line-height:1.65;"></div>
+            </div>
+            
+            <!-- GPS 定位雷達區 -->
+            <div id="puzzle-gps-container" class="gps-widget" style="display:none;">
+                <div class="gps-radar-ring">
+                    <div class="gps-radar-beam"></div>
+                    <div class="gps-radar-dot"></div>
+                </div>
+                <div id="gps-status-text" style="color: var(--accent-teal); font-weight: bold; margin-top: 10px; font-size: 0.95rem; letter-spacing: 1px;">🛰️ 現地 GPS 定位校準中...</div>
+                <div id="gps-distance-text" class="gps-distance">-- m</div>
+                <div id="gps-hint-text" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 5px;">請移動至指定範圍以喚醒圖騰記憶</div>
+                <button id="gps-mock-btn" class="btn-action" style="margin-top: 10px; padding: 6px 12px; font-size: 0.75rem; background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); width: auto;" onclick="mockGpsUnlock()">🔧 密鑰模擬抵達</button>
+            </div>
+
+            <input type="text" id="ans-input" style="width:100%; padding:18px; background:rgba(0,0,0,0.5); border:1px solid var(--glass-border); color:white; text-align:center; border-radius:12px; margin-bottom:20px; font-size:1.4rem;" placeholder="輸入驗證密鑰">
+            <button id="submit-btn" class="btn-action" style="width:100%;" onclick="verifyAnswer()">提交驗證</button>
+            <p id="puzzle-error" style="color:var(--error-red); display:none; text-align:center; margin-top:15px;"></p>
+        </div>
+    </section>
+
+    <!-- 9. 任務完成劇情頁 -->
+    <section id="lv-post-story-screen" class="screen">
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+            <button class="btn-back" onclick="prevLevelStep()" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                回到上一頁
+            </button>
+            <button class="btn-back" onclick="navigateTo('mission-screen')" style="margin-bottom: 0;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                任務列表
+            </button>
+        </div>
+        <div class="glass-card">
+            <div id="lv-post-img-box" class="img-container-full" style="display:block;"><img id="lv-post-img" src=""></div>
+            <div id="lv-post-text" style="line-height:2; font-size: 1rem; text-align: justify; white-space: pre-wrap;"></div>
+            <button id="post-story-next-btn" class="btn-action" style="width:100%; margin-top:25px;" onclick="completePostStory()">獲得圖騰 ➔</button>
+            <div id="lv-post-branches-container" class="branch-choice-container" style="display:none;"></div>
+        </div>
+    </section>
+
+    <!-- 10. 返航成功畫面 -->
+    <section id="final-success-screen" class="screen" style="justify-content: center; align-items: center; text-align: center;">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 24px; margin: auto;">
+            <h2 id="success-title-text" class="success-title" style="color: var(--accent-yellow); font-size: 2.2rem; margin-bottom: 20px; letter-spacing: 4px;">返航成功</h2>
+            <div id="success-img-box" class="img-container-full" style="display:none; margin-bottom: 18px;"><img id="success-img" src="" alt="結局圖片"></div>
+            <div id="success-story-text" class="story-text-container" style="text-align: justify; margin-bottom: 25px; max-height: 34dvh; overflow-y: auto;"></div>
+            <div id="success-game-title-text" style="background: rgba(76, 175, 80, 0.15); border: 1px solid var(--pass-green); color: #81c784; padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 25px; letter-spacing: 1px; font-size: 0.9rem;">
+                《守潮藏寶圖之外木山海岸安全航程》任務完成
+            </div>
+            <button class="btn-action" style="width: 100%;" onclick="navigateTo('final-summary-screen')">查看任務成果</button>
+        </div>
+    </section>
+
+    <!-- 11. 五段記憶成果頁面 -->
+    <section id="final-summary-screen" class="screen" style="justify-content: center; align-items: center; text-align: center;">
+        <div class="glass-card" style="width: 100%; max-width: 500px; padding: 24px; margin: auto;">
+            <h2 id="summary-title-text" class="success-title" style="color: var(--accent-yellow); font-size: 2rem; margin-bottom: 20px; letter-spacing: 4px;">五段八斗子記憶</h2>
+            
+            <div style="background: rgba(255, 215, 0, 0.1); border: 1px solid var(--accent-yellow); color: var(--accent-yellow); padding: 15px; border-radius: 12px; font-weight: bold; margin-bottom: 20px; letter-spacing: 1px; font-size: 0.95rem;">
+                ⏱️ 任務完成總耗時：<span id="completion-time-val" style="font-family: 'Noto Sans TC', sans-serif;">0 秒</span>
+            </div>
+
+            <div id="summary-story-text" class="story-text-container" style="text-align: justify; margin-bottom: 25px; max-height: 35dvh; overflow-y: auto;"></div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button class="btn-action" style="flex: 1; background: transparent; border: 1px solid var(--glass-border); color: white; padding: 10px;" onclick="resetGame()">重置再玩</button>
+                <button class="btn-action" style="flex: 1; padding: 10px;" onclick="navigateTo('mission-screen')">任務列表</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 全局底部導覽列 -->
+    <nav id="global-nav" class="bottom-nav">
+        <div class="nav-item" onclick="openOverlay('archive-overlay')">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 2L2 12h3v8h14v-8h3L12 2zm0 4.25l5 5V18H7v-6.75l5-5z"/>
+            </svg>
+            <div id="nav-archive-text">基本設定</div>
+        </div>
+        <div class="nav-item" onclick="openOverlay('settings-overlay')">
+            <svg viewBox="0 0 24 24">
+                <path d="M12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+            </svg>
+            <div id="nav-settings-text">設定</div>
+        </div>
+    </nav>
+
+    <!-- 圖騰展示覆蓋層 -->
+    <div id="archive-overlay" class="overlay" onclick="closeOverlay()">
+        <div class="glass-card">
+            <h3 id="overlay-archive-title" style="color: var(--accent-yellow); margin-bottom: 12px; font-size: 1.25rem;">我的失落圖騰庫</h3>
+            <p id="overlay-archive-desc" style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                此處收錄真灼之眼冒險團解鎖的 616 宇宙基隆記憶。尋回所有圖騰可開啟返航穿梭口。
+            </p>
+            <div id="archive-list" style="margin-top:15px; max-height: 50vh; overflow-y: auto;"></div>
+            <button id="overlay-archive-close" class="btn-action" style="margin-top:25px; width:100%;" onclick="closeOverlay()">關閉</button>
+        </div>
+    </div>
+    
+    <div id="settings-overlay" class="overlay" onclick="closeOverlay()">
+        <div class="glass-card">
+            <h3 id="overlay-settings-title">系統設定</h3>
+            <p id="overlay-settings-desc" style="font-size: 0.8rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 20px;">
+                此操作將徹底清空本裝置上已解鎖的進度數據。
+            </p>
+            <button id="overlay-settings-btn" class="btn-action" style="width:100%; background:var(--error-red); color:white;" onclick="resetGame()">重置任務進度</button>
+        </div>
+    </div>
+
+    <script>
+        // 輕量安全的 Markdown & BBCode 解析引擎 (支援換行、粗體、斜體與自訂文字顏色)
+        function escapeHtmlText(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function sanitizeColorValue(value) {
+            const color = String(value || '').trim();
+            if (/^#[0-9a-f]{3,8}$/i.test(color)) return color;
+            if (/^[a-zA-Z]+$/.test(color)) return color;
+            if (/^rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}(?:\s*,\s*(?:0|1|0?\.\d+))?\s*\)$/i.test(color)) return color;
+            return '';
+        }
+
+        function sanitizeUrl(value, options = {}) {
+            const raw = String(value || '').trim();
+            if (!raw || /[\u0000-\u001f"'<>]/.test(raw)) return '';
+            try {
+                const parsed = new URL(raw, window.location.href);
+                const protocol = parsed.protocol.toLowerCase();
+                if (protocol === 'http:' || protocol === 'https:' || protocol === 'file:') return raw;
+                if (options.allowDataImage && protocol === 'data:' && /^data:image\/(?:png|jpe?g|gif|webp);/i.test(raw)) return raw;
+            } catch (e) {
+                if (!/^\s*(?:javascript|data|vbscript):/i.test(raw)) return raw;
+            }
+            return '';
+        }
+
+        function sanitizeHtml(value) {
+            const template = document.createElement('template');
+            template.innerHTML = String(value || '');
+            const allowedTags = new Set(['B', 'STRONG', 'I', 'EM', 'BR', 'P', 'DIV', 'SPAN', 'UL', 'OL', 'LI', 'A']);
+
+            const clean = (node) => {
+                Array.from(node.childNodes).forEach(child => {
+                    if (child.nodeType !== Node.ELEMENT_NODE) return;
+                    if (!allowedTags.has(child.tagName)) {
+                        child.replaceWith(document.createTextNode(child.textContent || ''));
+                        return;
+                    }
+
+                    const originalHref = child.getAttribute('href') || '';
+                    const originalStyle = child.getAttribute('style') || '';
+                    Array.from(child.attributes).forEach(attr => child.removeAttribute(attr.name));
+
+                    if (child.tagName === 'A') {
+                        const href = sanitizeUrl(originalHref);
+                        if (href) {
+                            child.setAttribute('href', href);
+                            child.setAttribute('target', '_blank');
+                            child.setAttribute('rel', 'noopener noreferrer');
+                        }
+                    }
+
+                    if (child.tagName === 'SPAN') {
+                        const colorMatch = originalStyle.match(/color\s*:\s*([^;]+)/i);
+                        const color = sanitizeColorValue(colorMatch ? colorMatch[1] : '');
+                        if (color) child.setAttribute('style', `color:${color}`);
+                    }
+
+                    clean(child);
+                });
+            };
+
+            clean(template.content);
+            return template.innerHTML;
+        }
+
+        function parseMarkdown(text) {
+            if (!text) return '';
+            
+            const hasHtml = /<[a-z/][^>]*>/i.test(text);
+            let result;
+            
+            if (!hasHtml) {
+                // 傳統純文字：安全轉義特殊 HTML 標籤
+                result = text
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
+                // 自癒換行 \n -> <br>
+                result = result.replace(/\n/g, '<br>');
+            } else {
+                result = sanitizeHtml(text);
+            }
+            
+            // 粗體：**文字** 與 __文字__
+            result = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            result = result.replace(/__(.*?)__/g, '<strong>$1</strong>');
+            
+            // 斜體：*文字* 與 _文字_
+            result = result.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            result = result.replace(/_(.*?)_/g, '<em>$1</em>');
+            
+            // 自訂文字顏色 (Markdown 式)：[文字](color:#Hex或顏色名稱)
+            result = result.replace(/\[([^\]]+)\]\(color:([^\)]+)\)/g, (match, label, color) => {
+                const safeColor = sanitizeColorValue(color);
+                return safeColor ? `<span style="color:${safeColor}">${label}</span>` : label;
+            });
+            
+            // 自訂文字顏色 (BBCode 式)：[color=顏色]文字[/color]
+            result = result.replace(/\[color=([^\]]+)\](.*?)\[\/color\]/g, (match, color, label) => {
+                const safeColor = sanitizeColorValue(color);
+                return safeColor ? `<span style="color:${safeColor}">${label}</span>` : label;
+            });
+            
+            return result;
+        }
+
+        // 自動轉換一般 YouTube 連結或縮網址為 Iframe 專用嵌入網址格式
+        function getYouTubeEmbedUrl(url) {
+            if (!url) return '';
+            if (url.includes('/embed/')) return url;
+            
+            // 匹配常見的 YouTube 播放網址格式
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = url.match(regExp);
+            
+            if (match && match[2].length === 11) {
+                const videoId = match[2];
+                return `https://www.youtube.com/embed/${videoId}?si=DullesGame`;
+            }
+            return url;
+        }
+
+        const FALLBACK_SUCCESS_TITLE = '普通結局：安全回家的路';
+        const FALLBACK_SUCCESS_STORY = '守潮寶匣打開了。\n\n你找到的不是金幣，而是安全回家的方法。';
+        const FALLBACK_SUMMARY_TITLE = '守潮航程紀錄';
+        const FALLBACK_SUMMARY_STORY = '你完成了外木山海岸安全航程，學會先問、先看、先查、再判斷；條件不對，就不上水。';
+
+        // 1. 初始化資料庫資料
+        DullesData.init();
+        let globalConfig = DullesData.getConfig();
+        let missionData = DullesData.getPuzzles();
+        let activePuzzles = []; // 目前開啟中的任務列表
+        let bgMusicAudio = null;
+        let bgMusicUrl = '';
+        let bgMusicUnlockBound = false;
+        let backendSyncInProgress = false;
+
+        async function syncBackendDataForDisplay() {
+            if (!DullesData.isServerMode || !DullesData.isServerMode() || backendSyncInProgress) {
+                return false;
+            }
+            backendSyncInProgress = true;
+            try {
+                await DullesData.syncWithServer();
+                return true;
+            } catch (error) {
+                console.warn('Unable to refresh game data from backend before rendering:', error);
+                return false;
+            } finally {
+                backendSyncInProgress = false;
+            }
+        }
+
+        // 2. 玩家狀態快照
+        let state = { 
+            isStarted: false, 
+            completedMissions: [], 
+            activeMId: null, 
+            activeStep: 'main', 
+            storyPageIndex: 0, 
+            startTime: null, 
+            endTime: null,
+            teamName: '',
+            unlockedBranches: [],
+            gpsWatchId: null
+        };
+        
+        const STORAGE_KEY = 'abs_port_pro_' + DullesData.getSlug() + '_v18_final';
+        const INTERNAL_TEST_KEY = 'abs_port_internal_test_' + DullesData.getSlug() + '_v1';
+
+        // 🔒 啟用防止複製與鎖右鍵機制 (根據全站安全設定)
+        function applyCopyProtection() {
+            if (globalConfig.lockRightClick === true) {
+                document.addEventListener('contextmenu', e => e.preventDefault());
+                document.addEventListener('selectstart', e => e.preventDefault());
+                document.addEventListener('copy', e => e.preventDefault());
+                document.addEventListener('keydown', e => {
+                    if (e.keyCode === 123 || // F12
+                        (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) || // Ctrl+Shift+I/C/J
+                        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+                    ) {
+                        e.preventDefault();
+                    }
+                });
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    body {
+                        user-select: none !important;
+                        -webkit-user-select: none !important;
+                        -moz-user-select: none !important;
+                        -ms-user-select: none !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        function tryPlayBackgroundMusic() {
+            if (!bgMusicAudio || !bgMusicAudio.src) return;
+            const playPromise = bgMusicAudio.play();
+            if (playPromise && typeof playPromise.catch === 'function') {
+                playPromise.catch(() => {
+                    if (!bgMusicUnlockBound) {
+                        bgMusicUnlockBound = true;
+                        const unlock = () => {
+                            if (bgMusicAudio && bgMusicAudio.src) {
+                                bgMusicAudio.play().catch(() => {});
+                            }
+                            document.removeEventListener('click', unlock);
+                            document.removeEventListener('touchstart', unlock);
+                            bgMusicUnlockBound = false;
+                        };
+                        document.addEventListener('click', unlock, { once: true });
+                        document.addEventListener('touchstart', unlock, { once: true });
+                    }
+                });
+            }
+        }
+
+        function setupBackgroundMusic(url) {
+            const cleanUrl = (url || '').trim();
+            if (!cleanUrl) {
+                if (bgMusicAudio) {
+                    bgMusicAudio.pause();
+                    bgMusicAudio.removeAttribute('src');
+                    bgMusicAudio.load();
+                }
+                bgMusicUrl = '';
+                return;
+            }
+
+            if (!bgMusicAudio) {
+                bgMusicAudio = document.createElement('audio');
+                bgMusicAudio.id = 'global-bg-music';
+                bgMusicAudio.loop = true;
+                bgMusicAudio.preload = 'auto';
+                bgMusicAudio.style.display = 'none';
+                document.body.appendChild(bgMusicAudio);
+            }
+
+            if (bgMusicUrl !== cleanUrl) {
+                bgMusicUrl = cleanUrl;
+                bgMusicAudio.src = cleanUrl;
+                bgMusicAudio.load();
+            }
+            tryPlayBackgroundMusic();
+        }
+
+        // 3. 套用全局背景與標題設定
+        function applyGlobalConfig() {
+            globalConfig = DullesData.getConfig();
+            missionData = DullesData.getPuzzles();
+            activePuzzles = missionData.filter(m => m.enabled !== false);
+            
+            // 背景圖
+            const bgLayer = document.getElementById('bg-layer');
+            if (bgLayer && globalConfig.bgUrl) {
+                bgLayer.style.backgroundImage = `linear-gradient(rgba(10, 14, 20, 0.45), rgba(10, 14, 20, 0.8)), url('${globalConfig.bgUrl}')`;
+            }
+            setupBackgroundMusic(globalConfig.bgMusicUrl || '');
+
+            // 全站文字與按鈕配色自訂套用
+            const root = document.documentElement;
+            if (globalConfig.textColorMain) {
+                root.style.setProperty('--text-white', globalConfig.textColorMain);
+            }
+            if (globalConfig.textColorSub) {
+                root.style.setProperty('--accent-yellow', globalConfig.textColorSub);
+                // 動態更新黃色發光陰影配色
+                root.style.setProperty('--gold-glow', `0 0 20px ${globalConfig.textColorSub}66`);
+            }
+            if (globalConfig.textColorDim) {
+                root.style.setProperty('--text-dim', globalConfig.textColorDim);
+            }
+            
+            // 載入遊戲 LOGO 圖片
+            const loaderLogoContainer = document.getElementById('loader-logo-container');
+            const loaderLogo = document.getElementById('loader-logo');
+            const logoContainer = document.getElementById('logo-container');
+            const mainLogo = document.getElementById('main-logo');
+            
+            if (globalConfig.logoUrl) {
+                if (loaderLogo) {
+                    loaderLogo.src = globalConfig.logoUrl;
+                    if (loaderLogoContainer) loaderLogoContainer.style.display = 'block';
+                }
+                if (mainLogo) {
+                    mainLogo.src = globalConfig.logoUrl;
+                    if (logoContainer) logoContainer.style.display = 'block';
+                }
+            } else {
+                if (loaderLogoContainer) loaderLogoContainer.style.display = 'none';
+                if (logoContainer) logoContainer.style.display = 'none';
+            }
+
+            // 主副標題
+            const topTitleEl = document.getElementById('top-title');
+            if (topTitleEl) {
+                topTitleEl.innerText = globalConfig.titleTop || '守潮藏寶圖';
+            }
+            const creditTextEl = document.getElementById('credit-text');
+            if (creditTextEl) {
+                creditTextEl.innerText = globalConfig.titleCredit || '基隆外木山海岸走讀任務';
+            }
+            document.getElementById('main-title').innerText = globalConfig.titleMain || '外木山海岸安全航程';
+            document.getElementById('sub-title').innerText = globalConfig.titleSub || '';
+            document.title = (globalConfig.titleTop ? globalConfig.titleTop + '之' : '') + (globalConfig.titleMain || '杜勒日記') + ' - 實境解謎';
+            const missionHeaderKicker = document.getElementById('mission-header-kicker');
+            const missionHeaderTitle = document.getElementById('mission-header-title');
+            if (missionHeaderKicker) missionHeaderKicker.innerText = globalConfig.titleTop || 'Tidemark Log';
+            if (missionHeaderTitle) missionHeaderTitle.innerText = globalConfig.titleMain || '絕對傳奇：潮痕試煉';
+            const successGameTitleEl = document.getElementById('success-game-title-text');
+            if (successGameTitleEl) {
+                const gameTitle = [globalConfig.titleTop, globalConfig.titleMain].filter(Boolean).join('之') || '守潮藏寶圖之外木山海岸安全航程';
+                successGameTitleEl.innerText = `《${gameTitle}》任務完成`;
+            }
+
+            // 成功與結語面板文字
+            syncCompletedMissionsFromPlayer();
+            const allSideQuests = activePuzzles.filter(m => isSideQuest(m) && m.enabled !== false);
+            const completedSideQuests = allSideQuests.filter(m => hasCompletedMission(m.id));
+            const isPerfectEnding = allSideQuests.length > 0 && allSideQuests.length === completedSideQuests.length;
+            const uncompletedSideQuests = allSideQuests.filter(m => !hasCompletedMission(m.id));
+            
+            let finalSuccessTitle = globalConfig.successTitle || FALLBACK_SUCCESS_TITLE;
+            let successStory = globalConfig.successStory || FALLBACK_SUCCESS_STORY;
+            let successImg = globalConfig.successImg || '';
+            
+            if (isPerfectEnding && globalConfig.endingPerfectStory) {
+                finalSuccessTitle = globalConfig.endingPerfectTitle || '完美結局 ✨';
+                successStory = globalConfig.endingPerfectStory;
+                successImg = globalConfig.endingPerfectImg || successImg;
+            } else if (state.unlockedBranches && state.unlockedBranches.length > 0) {
+                if (globalConfig.ending1Tag && state.unlockedBranches.includes(globalConfig.ending1Tag) && globalConfig.ending1Story) {
+                    successStory = globalConfig.ending1Story;
+                } else if (globalConfig.ending2Tag && state.unlockedBranches.includes(globalConfig.ending2Tag) && globalConfig.ending2Story) {
+                    successStory = globalConfig.ending2Story;
+                }
+            }
+            
+            document.getElementById('success-title-text').innerText = finalSuccessTitle;
+            const successImgBox = document.getElementById('success-img-box');
+            const successImgEl = document.getElementById('success-img');
+            const safeSuccessImg = sanitizeUrl(successImg, { allowDataImage: true });
+            if (successImgBox && successImgEl && safeSuccessImg) {
+                successImgEl.src = safeSuccessImg;
+                successImgBox.style.display = 'block';
+            } else if (successImgBox) {
+                successImgBox.style.display = 'none';
+            }
+            
+            document.getElementById('success-story-text').innerHTML = successStory.split('\n\n').map(p => {
+                const formatted = parseMarkdown(p);
+                if (p.startsWith('「')) return `<p class="story-highlight">${formatted}</p>`;
+                return `<p>${formatted}</p>`;
+            }).join('');
+
+            document.getElementById('summary-title-text').innerText = globalConfig.summaryTitle || FALLBACK_SUMMARY_TITLE;
+            
+            const decodeUnicode = value => value.replace(/\\u([0-9a-fA-F]{4})/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)));
+            let extraSummaryHtml = '';
+            if (!isPerfectEnding && allSideQuests.length > 0) {
+                const missingList = uncompletedSideQuests.map(m => '<li>' + decodeUnicode('\\u5c1a\\u672a\\u4eae\\u8d77\\uff1a') + m.name + '</li>').join('');
+                extraSummaryHtml = `
+                    <div style="background: rgba(255, 87, 34, 0.1); border: 1px solid #ff5722; padding: 15px; border-radius: 12px; font-size: 0.85rem; color: #ff8a65; text-align: left; margin-top: 20px; line-height: 1.6; box-shadow: 0 0 10px rgba(255, 87, 34, 0.15);">
+                        <strong style="display: block; margin-bottom: 6px; color: #ffab91; font-size: 0.9rem;">${decodeUnicode('\\u5bf6\\u5323\\u5e95\\u90e8\\u9084\\u6709\\u6697\\u8a18\\u6c92\\u6709\\u4eae\\u8d77')}</strong>
+                        ${decodeUnicode('\\u4f60\\u5df2\\u7d93\\u628a\\u4e3b\\u8981\\u822a\\u7a0b\\u8d70\\u5b8c\\uff0c\\u4e5f\\u505a\\u51fa\\u4e86\\u5b89\\u5168\\u56de\\u5bb6\\u7684\\u9078\\u64c7\\u3002\\u53ea\\u662f\\u85cf\\u5bf6\\u5716\\u908a\\u89d2\\u4ecd\\u7559\\u4e0b')} ${uncompletedSideQuests.length} ${decodeUnicode('\\u9053\\u5fae\\u5149\\uff0c\\u50cf\\u662f\\u5728\\u63d0\\u9192\\u4f60\\uff1a\\u9019\\u7247\\u6d77\\u5cb8\\u9084\\u6709\\u5730\\u65b9\\u8a18\\u61b6\\u7b49\\u4f60\\u88dc\\u4e0a\\u3002')}
+                        <ul style="margin-left: 18px; margin-top: 5px; list-style-type: none;">${missingList}</ul>
+                        <span style="display: block; margin-top: 8px; font-size: 0.8rem; opacity: 0.85; border-top: 1px dashed rgba(255,87,34,0.2); padding-top: 6px;">${decodeUnicode('\\u7576\\u6240\\u6709\\u6697\\u8a18\\u4eae\\u8d77\\uff0c\\u5bf6\\u5323\\u6703\\u7559\\u4e0b\\u53e6\\u4e00\\u6bb5\\u7d66\\u4f60\\u7684\\u8a71\\u3002')}</span>
+                    </div>
+                `;
+            } else if (isPerfectEnding) {
+                extraSummaryHtml = `
+                    <div style="background: rgba(76, 175, 80, 0.15); border: 1px solid var(--pass-green); padding: 15px; border-radius: 12px; font-size: 0.85rem; color: #81c784; text-align: left; margin-top: 20px; line-height: 1.6; box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);">
+                        <strong style="display: block; margin-bottom: 6px; color: #a5d6a7; font-size: 0.9rem;">${decodeUnicode('\\u6240\\u6709\\u6697\\u8a18\\u90fd\\u4eae\\u8d77\\u4e86')}</strong>
+                        ${decodeUnicode('\\u4f60\\u6c92\\u6709\\u53ea\\u8d70\\u6700\\u77ed\\u7684\\u8def\\uff0c\\u800c\\u662f\\u628a\\u738b\\u8239\\u3001\\u5730\\u6a19\\u3001\\u6f6e\\u6c50\\u8207\\u540c\\u4f34\\u7684\\u63d0\\u9192\\u4e00\\u8d77\\u5e36\\u56de\\u4f86\\u3002\\u5bf6\\u5323\\u5e95\\u90e8\\u6d6e\\u51fa\\u6700\\u5f8c\\u4e00\\u884c\\u5b57\\uff1a\\u771f\\u6b63\\u7684\\u5b88\\u6f6e\\uff0c\\u4e0d\\u662f\\u9760\\u8fd1\\u5371\\u96aa\\uff0c\\u800c\\u662f\\u77e5\\u9053\\u4f55\\u6642\\u505c\\u4e0b\\uff0c\\u4e26\\u628a\\u8eab\\u908a\\u7684\\u4eba\\u4e00\\u8d77\\u5e36\\u56de\\u5cb8\\u4e0a\\u3002')}
+                    </div>
+                `;
+            }
+            document.getElementById('summary-story-text').innerHTML = (globalConfig.summaryStory || FALLBACK_SUMMARY_STORY).split('\n\n').map(p => {
+                const formatted = parseMarkdown(p);
+                return `<p>${formatted}</p>`;
+            }).join('') + extraSummaryHtml;
+            renderProloguePages();
+
+            const navArchText = document.getElementById('nav-archive-text');
+            if (navArchText) navArchText.innerText = globalConfig.navArchiveText || decodeUnicode('\u5b88\u6f6e\u5370\u8a18');
+
+            const navSetText = document.getElementById('nav-settings-text');
+            if (navSetText) navSetText.innerText = globalConfig.navSettingsText || decodeUnicode('\u822a\u7a0b\u8a2d\u5b9a');
+
+            const overlayArchTitle = document.getElementById('overlay-archive-title');
+            if (overlayArchTitle) overlayArchTitle.innerText = globalConfig.overlayArchiveTitle || decodeUnicode('\u5b88\u6f6e\u5370\u8a18\u5eab');
+
+            const overlayArchDesc = document.getElementById('overlay-archive-desc');
+            if (overlayArchDesc) overlayArchDesc.innerText = globalConfig.overlayArchiveDesc || decodeUnicode('\u67e5\u770b\u4f60\u5df2\u627e\u56de\u7684\u5b88\u6f6e\u5361\u8207\u85cf\u5716\u6697\u8a18\u3002');
+
+            const overlayArchClose = document.getElementById('overlay-archive-close');
+            if (overlayArchClose) overlayArchClose.innerText = globalConfig.overlayArchiveCloseBtn || decodeUnicode('\u95dc\u9589');
+
+            const overlaySetTitle = document.getElementById('overlay-settings-title');
+            if (overlaySetTitle) overlaySetTitle.innerText = globalConfig.overlaySettingsTitle || decodeUnicode('\u822a\u7a0b\u8a2d\u5b9a');
+
+            const overlaySetDesc = document.getElementById('overlay-settings-desc');
+            if (overlaySetDesc) overlaySetDesc.innerText = globalConfig.overlaySettingsDesc || decodeUnicode('\u6aa2\u67e5\u4f60\u7684\u97f3\u91cf\u3001\u8f14\u52a9\u8207\u91cd\u65b0\u51fa\u767c\u9078\u9805\u3002');
+            const overlaySetBtn = document.getElementById('overlay-settings-btn');
+            if (overlaySetBtn) overlaySetBtn.innerText = globalConfig.overlaySettingsResetBtn || decodeUnicode('\u91cd\u65b0\u51fa\u767c');
+            applyCopyProtection();
+        }
+        // 動態渲染序幕內容
+        function getVisibleProloguePages() {
+            return (globalConfig.prologuePages || []).filter(page => {
+                return page && ((page.title || '').trim() || (page.image || '').trim() || (page.text || '').trim());
+            });
+        }
+
+        function firstImageUrl(value) {
+            if (Array.isArray(value)) {
+                return value.find(item => String(item || '').trim()) || '';
+            }
+            return value || '';
+        }
+
+        function renderProloguePages() {
+            const container = document.getElementById('prologue-pages-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const pages = getVisibleProloguePages();
+            pages.forEach((page, index) => {
+                const pageId = index + 1;
+                const pageDiv = document.createElement('div');
+                pageDiv.id = `prologue-p${pageId}`;
+                pageDiv.className = `prologue-page ${index === 0 ? 'active' : ''}`;
+
+                let headerHtml = '';
+                if (index === 0) {
+                    headerHtml = `
+                        <button class="btn-back" onclick="navigateTo('main-screen')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            返回主畫面
+                        </button>
+                    `;
+                } else {
+                    headerHtml = `
+                        <button class="btn-back" onclick="showProloguePrev(${index})">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                            回到上一頁
+                        </button>
+                    `;
+                }
+
+                let videoHtml = '';
+                if (index === 0 && globalConfig.youtubeUrl) {
+                    const embedUrl = sanitizeUrl(getYouTubeEmbedUrl(globalConfig.youtubeUrl));
+                    if (embedUrl) {
+                        videoHtml = `
+                            <div class="video-container">
+                                <iframe src="${embedUrl}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            </div>
+                        `;
+                    }
+                }
+
+                let imgHtml = '';
+                const pageImage = sanitizeUrl(page.image, { allowDataImage: true });
+                if (pageImage) {
+                    imgHtml = `
+                        <div class="img-container-full" style="display:block; margin-bottom: 20px;">
+                            <img src="${pageImage}" alt="故事插圖">
+                        </div>
+                    `;
+                }
+
+                // 故事文本處理
+                const textParagraphs = (page.text || '').split('\n\n').filter(Boolean).map(p => {
+                    const formatted = parseMarkdown(p);
+                    if (p.startsWith('「') || p.startsWith('『')) return `<p class="story-highlight">${formatted}</p>`;
+                    return `<p>${formatted}</p>`;
+                }).join('');
+
+                let btnHtml = '';
+                if (index < pages.length - 1) {
+                    btnHtml = `<button class="btn-action" onclick="showPrologueNext(${pageId + 1})">繼續閱讀 ➔</button>`;
+                } else {
+                    btnHtml = `<button class="btn-action" onclick="navigateTo('mission-screen')">任務啟動 ➔</button>`;
+                }
+
+                pageDiv.innerHTML = `
+                    ${headerHtml}
+                    <h2 style="color:var(--accent-yellow); margin-bottom:20px; letter-spacing:3px; text-align: center;">${escapeHtmlText(page.title || '')}</h2>
+                    ${videoHtml}
+                    <div class="glass-card story-text-container">
+                        ${imgHtml}
+                        ${textParagraphs}
+                        <div style="text-align: right; margin-top: 15px;">
+                            ${btnHtml}
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(pageDiv);
+            });
+        }
+
+        function enterPrologueOrMissionList() {
+            document.querySelectorAll('.prologue-page').forEach(p => p.classList.remove('active'));
+            const p1 = document.getElementById('prologue-p1');
+            if (p1) {
+                p1.classList.add('active');
+                navigateTo('prologue-screen');
+            } else {
+                navigateTo('mission-screen');
+            }
+        }
+
+        function hasCompletedMission(levelId) {
+            const target = String(levelId);
+            return (Array.isArray(state.completedMissions) ? state.completedMissions : [])
+                .some(completedId => String(completedId) === target);
+        }
+
+        function mergeCompletedMissions(player) {
+            if (!player || !Array.isArray(player.completedLevels)) return;
+            state.completedMissions = Array.isArray(state.completedMissions) ? state.completedMissions : [];
+            player.completedLevels.forEach(levelId => {
+                const normalizedId = parseInt(levelId, 10);
+                if (!Number.isNaN(normalizedId) && !hasCompletedMission(normalizedId)) {
+                    state.completedMissions.push(normalizedId);
+                }
+            });
+            if (Array.isArray(player.unlockedBranches)) {
+                state.unlockedBranches = Array.isArray(state.unlockedBranches) ? state.unlockedBranches : [];
+                player.unlockedBranches.forEach(branch => {
+                    if (!state.unlockedBranches.includes(branch)) state.unlockedBranches.push(branch);
+                });
+            }
+        }
+
+        function syncCompletedMissionsFromPlayer() {
+            if (!state.teamName || !DullesData.getPlayers) return;
+            const targetTeamName = String(state.teamName || '').trim().toLowerCase();
+            const players = DullesData.getPlayers() || [];
+            const player = players.find(p => String((p && p.teamName) || '').trim().toLowerCase() === targetTeamName);
+            mergeCompletedMissions(player);
+        }
+
+        async function syncCompletedMissionsFromServer() {
+            if (!state.teamName || !DullesData.getPlayerProgress) return;
+            try {
+                mergeCompletedMissions(await DullesData.getPlayerProgress(state.teamName));
+                saveState();
+            } catch (error) {
+                console.warn('Unable to refresh completion state from server:', error);
+            }
+        }
+        function saveState() { 
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); 
+            if (state.teamName) {
+                try {
+                    DullesData.updatePlayerProgress(
+                        state.teamName, 
+                        state.activeMId, 
+                        state.activeStep === 'puzzle' ? `任務 #0${state.activeMId} 挑戰中` : state.activeStep
+                    );
+                } catch (error) {
+                    console.warn('Unable to sync player progress while saving state:', error);
+                }
+            }
+        }
+        
+        function loadState() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    state = Object.assign({}, state, parsed || {});
+                    state.completedMissions = Array.isArray(state.completedMissions) ? state.completedMissions : [];
+                    state.unlockedBranches = Array.isArray(state.unlockedBranches) ? state.unlockedBranches : [];
+                    if (state.isStarted && (state.completedMissions.length > 0 || state.activeMId)) {
+                        document.getElementById('resume-dialog').style.display = 'block';
+                    }
+                } catch (e) {
+                    console.warn('Invalid saved journey state, clearing it:', e);
+                    localStorage.removeItem(STORAGE_KEY);
+                }
+            }
+        }
+
+        function resumeGame() {
+            try {
+                const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                state = Object.assign({}, state, saved || {});
+                state.completedMissions = Array.isArray(state.completedMissions) ? state.completedMissions : [];
+                state.unlockedBranches = Array.isArray(state.unlockedBranches) ? state.unlockedBranches : [];
+            } catch (e) {
+                console.warn('Invalid saved journey state, starting over:', e);
+                localStorage.removeItem(STORAGE_KEY);
+                document.getElementById('resume-dialog').style.display = 'none';
+                navigateTo('start-screen');
+                return;
+            }
+            document.getElementById('resume-dialog').style.display = 'none';
+            
+            if (state.activeStep === 'final-success-screen') {
+                navigateTo('final-success-screen');
+            } else if (state.activeStep === 'final-summary-screen') {
+                navigateTo('final-summary-screen');
+            } else if (state.activeMId) {
+                openLevel(state.activeMId, state.activeStep, state.storyPageIndex);
+            } else {
+                navigateTo('mission-screen');
+            }
+        }
+
+        function discardAndStart() { 
+            localStorage.removeItem(STORAGE_KEY); 
+            location.reload(); 
+        }
+
+        function isInternalTestMode() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('test') === '1' || params.get('mode') === 'test' || params.get('open') === '1';
+        }
+
+        function isPublicOpenTestMode() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('open') === '1';
+        }
+
+        async function startInternalTestJourney() {
+            const publicOpenTest = isPublicOpenTestMode();
+            const savedInternal = publicOpenTest ? null : localStorage.getItem(INTERNAL_TEST_KEY);
+            if (savedInternal) {
+                try {
+                    const parsedInternal = JSON.parse(savedInternal);
+                    if (parsedInternal && parsedInternal.teamName) {
+                        const savedState = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+                        state = Object.assign({}, state, savedState || {}, {
+                            isStarted: true,
+                            teamName: parsedInternal.teamName,
+                            internalTest: true,
+                            activeStep: (savedState && savedState.activeStep) || 'main',
+                            completedMissions: Array.isArray(savedState && savedState.completedMissions) ? savedState.completedMissions : [],
+                            unlockedBranches: Array.isArray(savedState && savedState.unlockedBranches) ? savedState.unlockedBranches : []
+                        });
+                        const loginDialog = document.getElementById('login-dialog');
+                        const dateDialog = document.getElementById('date-lock-dialog');
+                        const resumeDialog = document.getElementById('resume-dialog');
+                        if (loginDialog) loginDialog.style.display = 'none';
+                        if (dateDialog) dateDialog.style.display = 'none';
+                        if (resumeDialog) resumeDialog.style.display = 'none';
+                        saveState();
+                        if (state.activeMId) {
+                            openLevel(state.activeMId, state.activeStep, state.storyPageIndex);
+                        } else if (state.activeStep === 'final-success-screen') {
+                            navigateTo('final-success-screen');
+                        } else if (state.activeStep === 'final-summary-screen') {
+                            navigateTo('final-summary-screen');
+                        } else {
+                            enterPrologueOrMissionList();
+                        }
+                        return;
+                    }
+                } catch (e) {
+                    localStorage.removeItem(INTERNAL_TEST_KEY);
+                }
+            }
+            const now = new Date();
+            const stamp = [
+                now.getFullYear(),
+                String(now.getMonth() + 1).padStart(2, '0'),
+                String(now.getDate()).padStart(2, '0'),
+                String(now.getHours()).padStart(2, '0'),
+                String(now.getMinutes()).padStart(2, '0'),
+                String(now.getSeconds()).padStart(2, '0')
+            ].join('');
+            let teamName = publicOpenTest
+                ? `[\u516c\u958b\u6e2c\u8a66] ${DullesData.getSlug()}-${stamp}`
+                : `[\u5167\u90e8\u6e2c\u8a66] ${DullesData.getSlug()}-${stamp}`;
+            let player = null;
+            if (!publicOpenTest && DullesData.internalTestPlayer) {
+                player = await DullesData.internalTestPlayer('Internal Test Mode');
+                if (player && player.teamName) {
+                    teamName = player.teamName;
+                }
+            } else if (DullesData.openTestPlayer) {
+                player = await DullesData.openTestPlayer('Open Test Mode');
+                if (player && player.teamName) {
+                    teamName = player.teamName;
+                }
+            }
+
+            localStorage.removeItem(STORAGE_KEY);
+            state = {
+                isStarted: true,
+                completedMissions: [],
+                activeMId: null,
+                activeStep: 'main',
+                storyPageIndex: 0,
+                startTime: Date.now(),
+                endTime: null,
+                teamName,
+                internalTest: true,
+                unlockedBranches: [],
+                gpsWatchId: null
+            };
+
+            if (!player) {
+                player = DullesData.loginPlayer(teamName, 'Open Test Mode');
+            }
+
+            const loginDialog = document.getElementById('login-dialog');
+            const dateDialog = document.getElementById('date-lock-dialog');
+            const resumeDialog = document.getElementById('resume-dialog');
+            if (loginDialog) loginDialog.style.display = 'none';
+            if (dateDialog) dateDialog.style.display = 'none';
+            if (resumeDialog) resumeDialog.style.display = 'none';
+
+            saveState();
+            if (!publicOpenTest) {
+                localStorage.setItem(INTERNAL_TEST_KEY, JSON.stringify({
+                    teamName,
+                    playerId: player && player.id ? player.id : '',
+                    createdAt: Date.now()
+                }));
+            }
+            enterPrologueOrMissionList();
+        }
+
+        // 🔑 啟動探險與登記隊名
+        function startNewJourney() { 
+            document.getElementById('login-dialog').style.display = 'block';
+            document.getElementById('login-error').style.display = 'none';
+            document.getElementById('team-name-input').value = '';
+        }
+
+        function closeLoginDialog() {
+            document.getElementById('login-dialog').style.display = 'none';
+        }
+
+        function submitStaticLogin() {
+            const input = document.getElementById('team-name-input');
+            const loginError = document.getElementById('login-error');
+            const teamName = String(input && input.value || '').trim();
+            if (!teamName) {
+                loginError.innerText = '請先輸入隊伍名稱。';
+                loginError.style.display = 'block';
+                return;
+            }
+
+            state.teamName = teamName;
+            state.isStarted = true;
+            state.startTime = state.startTime || Date.now();
+            state.endTime = null;
+            DullesData.loginPlayer(teamName, 'GitHub Pages');
+            document.getElementById('login-dialog').style.display = 'none';
+            saveState();
+            enterPrologueOrMissionList();
+        }
+
+        function submitLogin() {
+            const teamNameInput = document.getElementById('team-name-input').value.trim();
+            if (!teamNameInput) {
+                document.getElementById('login-error').style.display = 'block';
+                return;
+            }
+
+            state.teamName = teamNameInput;
+            document.getElementById('login-dialog').style.display = 'none';
+
+            // 向後端註冊/登入玩家資訊
+            DullesData.loginPlayer(teamNameInput);
+
+            // 進入今日日期時空金鑰驗證
+            document.getElementById('date-lock-dialog').style.display = 'block';
+            document.getElementById('date-error').style.display = 'none';
+            document.getElementById('date-input').value = '';
+        }
+
+        // 新增：使用活動密碼金鑰登入並繞過日期鎖
+        async function submitLoginByPassword() {
+            const pwdInput = document.getElementById('team-name-input').value.trim();
+            const loginError = document.getElementById('login-error');
+            const loginButton = document.querySelector('#login-dialog button[onclick="submitLoginByPassword()"]');
+            if (!pwdInput) {
+                loginError.innerText = '請輸入配發的專屬活動登入金鑰密碼。';
+                loginError.style.display = 'block';
+                return;
+            }
+
+            if (loginButton) {
+                loginButton.disabled = true;
+                loginButton.dataset.originalText = loginButton.dataset.originalText || loginButton.innerText;
+                loginButton.innerText = '驗證中...';
+            }
+            loginError.style.display = 'none';
+
+            try {
+                const player = await DullesData.loginPlayerByPassword(pwdInput);
+                if (!player) {
+                    loginError.innerText = '金鑰驗證失敗或尚未通過核准，請再次確認！';
+                    loginError.style.display = 'block';
+                    return;
+                }
+
+                state.teamName = player.teamName;
+                state.isStarted = true;
+                state.startTime = player.startTime || Date.now();
+                state.endTime = player.endTime || null;
+                saveState();
+
+                document.getElementById('login-dialog').style.display = 'none';
+
+                enterPrologueOrMissionList();
+            } catch (error) {
+                console.error('Login by password failed:', error);
+                loginError.innerText = '登入驗證暫時失敗，請稍後再試。';
+                loginError.style.display = 'block';
+            } finally {
+                if (loginButton) {
+                    loginButton.disabled = false;
+                    loginButton.innerText = loginButton.dataset.originalText || '開始探險 ➔';
+                }
+            }
+        }
+
+        // 驗證今日金鑰
+        function verifyDateCode() {
+            const input = document.getElementById('date-input').value.trim();
+            const now = new Date();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            const correctCode = mm + dd;
+
+            if (input === correctCode) {
+                document.getElementById('date-lock-dialog').style.display = 'none';
+                
+                // 開始定位：初始化開始時間與狀態
+                state.isStarted = true;
+                state.startTime = Date.now();
+                state.endTime = null;
+                saveState();
+                
+                enterPrologueOrMissionList(); 
+            } else {
+                document.getElementById('date-error').style.display = 'block';
+            }
+        }
+
+        function closeDateLock() {
+            document.getElementById('date-lock-dialog').style.display = 'none';
+        }
+
+        function showPrologueNext(nextPageId) { 
+            document.querySelectorAll('.prologue-page').forEach(p => p.classList.remove('active')); 
+            const target = document.getElementById(`prologue-p${nextPageId}`);
+            if (target) target.classList.add('active');
+        }
+
+        function showProloguePrev(prevPageIndex) {
+            document.querySelectorAll('.prologue-page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(`prologue-p${prevPageIndex}`);
+            if (target) target.classList.add('active');
+        }
+
+        function prevLevelStep() {
+            const m = activePuzzles.find(x => x.id === state.activeMId) || missionData.find(x => x.id === state.activeMId);
+            if (!m) return;
+            
+            if (state.activeStep === 'info') {
+                navigateTo('mission-screen');
+                return;
+            }
+            
+            if (state.activeStep === 'story') {
+                if (state.storyPageIndex > 0) {
+                    openLevel(state.activeMId, 'story', state.storyPageIndex - 1);
+                } else {
+                    openLevel(state.activeMId, 'info');
+                }
+                return;
+            }
+            
+            if (state.activeStep === 'landmark') {
+                const storyPages = getVisibleLevelStoryPages(m);
+                if (storyPages.length) {
+                    openLevel(state.activeMId, 'story', storyPages.length - 1);
+                } else {
+                    openLevel(state.activeMId, 'info');
+                }
+                return;
+            }
+            
+            if (state.activeStep === 'puzzle') {
+                openLevel(state.activeMId, 'landmark');
+                return;
+            }
+            
+            if (state.activeStep === 'postStory') {
+                if (state.completedMissions.includes(state.activeMId)) {
+                    openLevel(state.activeMId, 'landmark');
+                } else {
+                    openLevel(state.activeMId, 'puzzle');
+                }
+                return;
+            }
+        }
+
+        // ⏱️ 計算通關總耗時
+        function calculateElapsedTime() {
+            if (!state.startTime) return "0 秒";
+            const endTime = state.endTime || Date.now();
+            const diffMs = endTime - state.startTime;
+            const totalSecs = Math.floor(diffMs / 1000);
+            
+            if (totalSecs <= 0) return "1 秒";
+            
+            const hours = Math.floor(totalSecs / 3600);
+            const mins = Math.floor((totalSecs % 3600) / 60);
+            const secs = totalSecs % 60;
+            
+            let res = "";
+            if (hours > 0) res += hours + " 小時 ";
+            if (mins > 0 || hours > 0) res += mins + " 分 ";
+            res += secs + " 秒";
+            return res;
+        }
+
+        async function navigateTo(screenId) {
+            if (screenId === 'final-summary-screen') {
+                await syncCompletedMissionsFromServer();
+                applyGlobalConfig();
+            }
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            
+            const targetScreen = document.getElementById(screenId);
+            if (targetScreen) {
+                targetScreen.classList.add('active');
+                targetScreen.scrollTop = 0;
+            }
+            
+            const nav = document.getElementById('global-nav');
+            if (nav) {
+                const showNav = (screenId === 'mission-screen');
+                nav.style.display = showNav ? 'grid' : 'none';
+            }
+            
+            if (screenId === 'mission-screen') { 
+                state.isStarted = true; 
+                state.activeMId = null; 
+                state.activeStep = 'main';
+                saveState(); 
+                renderMissionList(); 
+                renderTotems(); 
+            } else if (screenId === 'final-success-screen') {
+                state.activeStep = 'final-success-screen';
+                saveState();
+            } else if (screenId === 'final-summary-screen') {
+                state.activeStep = 'final-summary-screen';
+                saveState();
+                
+                const timeValEl = document.getElementById('completion-time-val');
+                if (timeValEl) {
+                    timeValEl.innerText = calculateElapsedTime();
+                }
+            }
+        }
+
+        function switchQuestTab(type) {
+            state.activeQuestTab = type;
+            saveState();
+            
+            const btnMain = document.getElementById('tab-main-quests');
+            const btnSide = document.getElementById('tab-side-quests');
+            if (btnMain && btnSide) {
+                if (type === 'main') {
+                    btnMain.classList.add('active');
+                    btnSide.classList.remove('active');
+                } else {
+                    btnSide.classList.add('active');
+                    btnMain.classList.remove('active');
+                }
+            }
+            renderMissionList();
+        }
+
+        function isSideQuest(mission) {
+            return !!mission && (mission.isSideQuest === true || mission.questType === 'side');
+        }
+
+        function getFinalPuzzle() {
+            const enabledPuzzles = activePuzzles.filter(m => m.enabled !== false);
+            const mainPuzzles = enabledPuzzles.filter(m => !isSideQuest(m));
+            return [...mainPuzzles].reverse().find(m => m.isFinal) || mainPuzzles[mainPuzzles.length - 1] || enabledPuzzles[enabledPuzzles.length - 1];
+        }
+
+        function renderMissionList() {
+            const container = document.getElementById('mission-list-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (!Array.isArray(activePuzzles) || !activePuzzles.length) {
+                missionData = DullesData.getPuzzles();
+                activePuzzles = missionData.filter(m => m.enabled !== false);
+            }
+
+            if (!activePuzzles.length) {
+                container.innerHTML = `
+                    <div class="glass-card" style="text-align:center; padding:24px;">
+                        <h3 style="color:var(--accent-yellow); margin-bottom:10px;">任務資料載入中</h3>
+                        <p style="color:var(--text-dim); line-height:1.7;">請稍候再試，或重新整理頁面。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const currentTab = state.activeQuestTab || 'main';
+            
+            const btnMain = document.getElementById('tab-main-quests');
+            const btnSide = document.getElementById('tab-side-quests');
+            if (btnMain && btnSide) {
+                if (currentTab === 'main') {
+                    btnMain.classList.add('active');
+                    btnSide.classList.remove('active');
+                } else {
+                    btnSide.classList.add('active');
+                    btnMain.classList.remove('active');
+                }
+            }
+            
+            const filteredPuzzles = activePuzzles.filter(m => {
+                const qType = isSideQuest(m) ? 'side' : (m.questType || 'main');
+                return qType === currentTab;
+            });
+
+            if (!filteredPuzzles.length) {
+                container.innerHTML = `
+                    <div class="glass-card" style="text-align:center; padding:24px;">
+                        <h3 style="color:var(--accent-yellow); margin-bottom:10px;">此分類目前沒有任務</h3>
+                        <p style="color:var(--text-dim); line-height:1.7;">請切換上方分類查看其他任務。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredPuzzles.forEach(m => {
+                const qType = isSideQuest(m) ? 'side' : (m.questType || 'main');
+                const qClass = qType === 'side' ? 'quest-side' : 'quest-main';
+                const qIcon = qType === 'side' ? '🗺️' : '🌊';
+                const qTypeName = qType === 'side' ? '暗記' : '浪紋';
+                const isPassed = state.completedMissions.includes(m.id);
+                
+                let status = 'available';
+                if (isPassed) {
+                    status = 'passed';
+                } else {
+                    // 動態依賴鏈鎖定判定 (客製化依賴前置關卡與全域總大鎖 "all")
+                    if (m.dependsOn === "all") {
+                        const otherPuzzles = activePuzzles.filter(p => p.id !== m.id);
+                        const hasAllPassed = otherPuzzles.every(p => state.completedMissions.includes(p.id));
+                        if (!hasAllPassed) {
+                            status = 'locked';
+                        }
+                    } else if (m.dependsOn !== undefined && m.dependsOn !== null && m.dependsOn !== "") {
+                        const depId = parseInt(m.dependsOn);
+                        const isDepPassed = state.completedMissions.includes(depId);
+                        if (!isDepPassed) {
+                            status = 'locked';
+                        }
+                    }
+                }
+                
+                // 判定分支解鎖狀態限制 (dependsOnBranch)
+                if (status !== 'locked' && m.dependsOnBranch) {
+                    if (!state.unlockedBranches || !state.unlockedBranches.includes(m.dependsOnBranch)) {
+                        status = 'locked';
+                    }
+                }
+
+                const card = document.createElement('div');
+                card.className = `mission-card ${status} ${qClass}`;
+                card.innerHTML = `
+                    <div class="card-info">
+                        <div class="m-id" style="display: flex; align-items: center; gap: 5px;">
+                            <span style="font-size:0.8rem;">${qIcon}</span>
+                            <span>${escapeHtmlText(qTypeName)} #${m.id}</span>
+                        </div>
+                        <div class="m-name">${escapeHtmlText(m.name || '')}</div>
+                        <div class="m-stars">${"★".repeat(m.stars)}${"☆".repeat(5-m.stars)}</div>
+                    </div>
+                    <div class="card-status" style="font-weight:900; color:var(--accent-yellow)">${status === 'available' ? 'GO' : (status === 'locked' ? '🔒' : '')}</div>
+                    <div class="pass-stamp-mini">PASS</div>
+                `;
+                if (status !== 'locked') {
+                    card.onclick = () => openLevel(m.id);
+                }
+                container.appendChild(card);
+            });
+        }
+
+        function getVisibleLevelStoryPages(m) {
+            const stories = Array.isArray(m.story) ? m.story : (m.story ? [m.story] : []);
+            const imgs = Array.isArray(m.storyImg) ? m.storyImg : (m.storyImg ? [m.storyImg] : []);
+            const len = Math.max(stories.length, imgs.length);
+            const pages = [];
+            for (let i = 0; i < len; i++) {
+                const text = (stories[i] || '').trim();
+                const image = (imgs[i] || '').trim();
+                if (text || image) pages.push({ text, image });
+            }
+            return pages;
+        }
+
+        function openLevel(id, step = 'info', page = 0) {
+            const m = activePuzzles.find(x => x.id === id);
+            if (!m) return;
+            const storyPages = getVisibleLevelStoryPages(m);
+            if (step === 'story' && !storyPages.length) {
+                openLevel(id, 'landmark');
+                return;
+            }
+            state.activeMId = id; state.activeStep = step; state.storyPageIndex = page; saveState();
+            
+            // 如果不是解謎階段，清除 GPS 監聽
+            if (step !== 'puzzle' && state.gpsWatchId) {
+                navigator.geolocation.clearWatch(state.gpsWatchId);
+                state.gpsWatchId = null;
+            }
+
+            if (step === 'info') {
+                document.getElementById('lv-info-chapter').innerText = m.chapter;
+                document.getElementById('lv-info-name').innerText = m.name;
+                document.getElementById('lv-info-stars').innerText = "★".repeat(m.stars) + "☆".repeat(5-m.stars);
+                drawRadar(m.radar);
+                navigateTo('lv-info-screen');
+            } else if (step === 'story') {
+                const imgBox = document.getElementById('lv-story-img-box');
+                const imgEl = document.getElementById('lv-story-img');
+                const safePage = Math.max(0, Math.min(page, storyPages.length - 1));
+                const currentPage = storyPages[safePage] || { text: '', image: '' };
+                
+                const currentImg = sanitizeUrl(currentPage.image, { allowDataImage: true });
+                
+                if (currentImg) { 
+                    imgEl.src = currentImg; 
+                    imgBox.style.display = 'block'; 
+                } else { 
+                    imgBox.style.display = 'none'; 
+                }
+                document.getElementById('lv-story-text').innerHTML = parseMarkdown(currentPage.text || '');
+                
+                const nextArrow = document.querySelector('.next-arrow');
+                if (nextArrow) {
+                    if (safePage === storyPages.length - 1) {
+                        nextArrow.innerText = m.storyBtnText || "➔";
+                    } else {
+                        nextArrow.innerText = "➔";
+                    }
+                }
+                state.storyPageIndex = safePage;
+                saveState();
+                navigateTo('lv-story-screen');
+            } else if (step === 'landmark') {
+                const imgBox = document.getElementById('lv-landmark-img-box');
+                const imgEl = document.getElementById('lv-landmark-img');
+                const landmarkImg = sanitizeUrl(m.landmarkImg || '', { allowDataImage: true });
+                if (landmarkImg) { 
+                    imgEl.src = landmarkImg; 
+                    imgBox.style.display = 'block'; 
+                } else { 
+                    imgBox.style.display = 'none'; 
+                }
+                document.getElementById('lv-landmark-text').innerHTML = parseMarkdown(m.landmarkText);
+                document.getElementById('lv-landmark-btn').innerText = m.landmarkBtnText || "前往解謎";
+                navigateTo('lv-landmark-screen');
+            } else if (step === 'puzzle') {
+                if (state.completedMissions.includes(id)) {
+                    if (m.postStory) openLevel(id, 'postStory');
+                    else completePostStory();
+                    return;
+                }
+                document.getElementById('lv-puzzle-desc').innerHTML = parseMarkdown(m.puzzleDesc || "輸入密鑰：");
+                
+                const ansInput = document.getElementById('ans-input');
+                ansInput.value = '';
+                ansInput.placeholder = m.inputPlaceholder || "輸入驗證密鑰";
+
+                const submitBtn = document.getElementById('submit-btn');
+                if (submitBtn) {
+                    submitBtn.innerText = m.submitBtnText || "提交驗證";
+                }
+
+                document.getElementById('puzzle-error').style.display = 'none';
+                state.visibleHints = state.visibleHints || {};
+                state.visibleHints[id] = 0;
+                renderPuzzleHints(m);
+                
+                // GPS 衛星定位雷達處理
+                const gpsContainer = document.getElementById('puzzle-gps-container');
+                if (gpsContainer) {
+                    if (m.gpsEnabled === true) {
+                        gpsContainer.style.display = 'block';
+                        if (submitBtn) {
+                            submitBtn.disabled = true;
+                            submitBtn.style.opacity = '0.5';
+                            submitBtn.style.cursor = 'not-allowed';
+                        }
+                        
+                        document.getElementById('gps-status-text').innerText = "🛰️ 現地 GPS 定位校準中...";
+                        document.getElementById('gps-distance-text').innerText = "-- m";
+                        
+                        if (navigator.geolocation) {
+                            state.gpsWatchId = navigator.geolocation.watchPosition(
+                                (pos) => {
+                                    renderGpsVerification(pos.coords.latitude, pos.coords.longitude, m);
+                                },
+                                (err) => {
+                                    console.error("GPS 定位失敗", err);
+                                    document.getElementById('gps-status-text').innerText = "🛰️ GPS 定位訊號異常，請確認授權！";
+                                },
+                                { enableHighAccuracy: true, maximumAge: 1000, timeout: 10000 }
+                            );
+                        } else {
+                            document.getElementById('gps-status-text').innerText = "❌ 瀏覽器不支援 Geolocation";
+                        }
+                    } else {
+                        gpsContainer.style.display = 'none';
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.style.opacity = '1';
+                            submitBtn.style.cursor = 'pointer';
+                        }
+                    }
+                }
+
+                // 渲染客製化解謎模組
+                renderCustomPuzzle(m);
+                
+                navigateTo('lv-puzzle-screen');
+            } else if (step === 'postStory') {
+                const imgBox = document.getElementById('lv-post-img-box');
+                const imgEl = document.getElementById('lv-post-img');
+                if (m.postStoryImg) { 
+                    imgEl.src = m.postStoryImg; 
+                    imgBox.style.display = 'block'; 
+                } else { 
+                    imgBox.style.display = 'none'; 
+                }
+                document.getElementById('lv-post-text').innerHTML = parseMarkdown(m.postStory || '');
+                
+                const postBtn = document.getElementById('post-story-next-btn') || document.getElementById('lv-post-btn');
+                if (postBtn) {
+                    postBtn.innerText = m.postStoryBtnText || "獲得圖騰 ➔";
+                }
+                
+                // 處理劇情分支按鈕
+                const branchesContainer = document.getElementById('lv-post-branches-container');
+                if (branchesContainer) {
+                    if (m.branch1Label && m.branch2Label) {
+                        if (postBtn) postBtn.style.display = 'none';
+                        branchesContainer.style.display = 'flex';
+                        branchesContainer.innerHTML = `
+                            <button class="btn-branch-choice" onclick="selectStoryBranch('${m.branch1Tag || 'branch1'}')">
+                                <div style="font-weight: bold; color: var(--accent-yellow); margin-bottom: 4px;">分支選項一</div>
+                                <div>${m.branch1Label} ➔</div>
+                            </button>
+                            <button class="btn-branch-choice" onclick="selectStoryBranch('${m.branch2Tag || 'branch2'}')">
+                                <div style="font-weight: bold; color: var(--accent-yellow); margin-bottom: 4px;">分支選項二</div>
+                                <div>${m.branch2Label} ➔</div>
+                            </button>
+                        `;
+                    } else {
+                        if (postBtn) postBtn.style.display = 'block';
+                        branchesContainer.style.display = 'none';
+                        branchesContainer.innerHTML = '';
+                    }
+                }
+
+                // 同步相容原版導航與修正後的 ID
+                const targetScreen = document.getElementById('lv-post-story-screen') ? 'lv-post-story-screen' : 'lv-post-screen';
+                navigateTo(targetScreen);
+            }
+        }
+
+        function drawRadar(vals) {
+            const angles = [-90, -30, 30, 90, 150, 210];
+            const pts = angles.map((a, i) => { 
+                const r = (vals[i] / 5) * 40; 
+                return `${50 + r * Math.cos(a * Math.PI / 180)},${50 + r * Math.sin(a * Math.PI / 180)}`; 
+            }).join(' ');
+            const shape = document.getElementById('radar-shape');
+            if (shape) {
+                shape.setAttribute('points', pts);
+            }
+        }
+
+        function nextLevelStep() { 
+            const steps = ['info', 'story', 'landmark', 'puzzle', 'postStory']; 
+            let nextIndex = steps.indexOf(state.activeStep) + 1;
+            let nextStep = steps[nextIndex];
+            const m = activePuzzles.find(x => x.id === state.activeMId);
+            if (nextStep === 'story' && m && !getVisibleLevelStoryPages(m).length) {
+                nextStep = 'landmark';
+            }
+            
+            if (nextStep === 'puzzle' && state.completedMissions.includes(state.activeMId)) {
+                if (m && m.postStory) nextStep = 'postStory';
+                else { completePostStory(); return; }
+            }
+            openLevel(state.activeMId, nextStep); 
+        }
+
+        function nextStoryPage() { 
+            const m = activePuzzles.find(x => x.id === state.activeMId); 
+            if (!m) return;
+            const storyPages = getVisibleLevelStoryPages(m);
+            if (state.storyPageIndex < storyPages.length - 1) {
+                openLevel(state.activeMId, 'story', state.storyPageIndex + 1); 
+            } else {
+                nextLevelStep(); 
+            }
+        }
+
+        // ==================== BeachTime 互動謎題渲染引擎 ====================
+        function renderCustomPuzzle(m) {
+            const container = document.getElementById('custom-puzzle-container');
+            const ansInput = document.getElementById('ans-input');
+            if (!container) return;
+            
+            // 清空容器
+            container.innerHTML = '';
+            
+            // 重置臨時選取的答案與狀態
+            state.tempSelectedAnswer = '';
+            state.selectedCells = [];
+            
+            const puzzleType = m.puzzleType || 'text';
+            
+            // 根據謎題類型調整標準輸入框顯示與唯讀屬性
+            ansInput.readOnly = false;
+            
+            if (puzzleType === 'text') {
+                ansInput.style.display = 'block';
+                ansInput.value = '';
+                
+                // 渲染自訂謎題圖片 (若文字輸入型有關卡圖片的話)
+                const pImg = sanitizeUrl(m.puzzleImg || '', { allowDataImage: true });
+                if (pImg) {
+                    const imgEl = document.createElement('img');
+                    imgEl.src = pImg;
+                    imgEl.className = 'puzzle-illustration-img';
+                    imgEl.style.width = '100%';
+                    imgEl.style.maxWidth = '100%';
+                    imgEl.style.borderRadius = '8px';
+                    imgEl.style.marginBottom = '15px';
+                    imgEl.style.border = '1px solid var(--glass-border)';
+                    imgEl.style.boxShadow = '0 0 15px rgba(0,229,255,0.15)';
+                    imgEl.style.display = 'block';
+                    imgEl.style.marginLeft = 'auto';
+                    imgEl.style.marginRight = 'auto';
+                    container.appendChild(imgEl);
+                }
+                return;
+            }
+            
+            // 對於其他 BeachTime 互動型，預設隱藏或以特定形式連動 ans-input
+            if (puzzleType === 'grid') {
+                // 3x3 互動式影像網格：ans-input 設為唯讀並顯示，方便玩家看到加總數字
+                ansInput.style.display = 'block';
+                ansInput.readOnly = true;
+                ansInput.value = '0';
+                
+                const gridImg = sanitizeUrl(m.puzzleImg || m.landmarkImg || firstImageUrl(m.storyImg) || '', { allowDataImage: true });
+                const gridEl = document.createElement('div');
+                gridEl.className = 'puzzle-grid-container';
+                if (gridImg) {
+                    const gridImageEl = document.createElement('img');
+                    gridImageEl.className = 'puzzle-grid-image';
+                    gridImageEl.src = gridImg;
+                    gridImageEl.alt = m.name || '九宮格判讀圖片';
+                    gridEl.appendChild(gridImageEl);
+                } else {
+                    gridEl.style.background = 'rgba(255, 255, 255, 0.05)';
+                }
+                
+                // 生成 9 個格子
+                for (let i = 1; i <= 9; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.innerText = i;
+                    cell.onclick = () => {
+                        cell.classList.toggle('selected');
+                        const idx = state.selectedCells.indexOf(i);
+                        if (idx > -1) {
+                            state.selectedCells.splice(idx, 1);
+                        } else {
+                            state.selectedCells.push(i);
+                        }
+                        // 加總選中格子編號
+                        const sum = state.selectedCells.reduce((a, b) => a + b, 0);
+                        ansInput.value = sum.toString();
+                    };
+                    gridEl.appendChild(cell);
+                }
+                container.appendChild(gridEl);
+                
+            } else if (puzzleType === 'choice' || puzzleType === 'flag') {
+                // 通用圖文／影像判讀單選題：隱藏標準輸入框
+                ansInput.style.display = 'none';
+
+                const mainImg = sanitizeUrl(m.puzzleImg || '', { allowDataImage: true });
+                if (mainImg) {
+                    const imageBox = document.createElement('div');
+                    imageBox.className = 'violation-container puzzle-image-container';
+                    imageBox.style.marginBottom = '16px';
+                    const imgEl = document.createElement('img');
+                    imgEl.src = mainImg;
+                    imgEl.alt = '謎題判讀圖片';
+                    imageBox.appendChild(imgEl);
+                    container.appendChild(imageBox);
+                }
+                
+                const gridEl = document.createElement('div');
+                gridEl.className = 'flag-grid';
+                
+                const options = m.puzzleOptions || [];
+                const optionLetters = ['A', 'B', 'C', 'D'];
+                
+                options.forEach((opt, idx) => {
+                    const letter = optionLetters[idx];
+                    const item = document.createElement('div');
+                    item.className = 'flag-item';
+                    item.dataset.letter = letter;
+                    const optLabel = typeof opt === 'object' ? (opt.label || '') : String(opt || '');
+                    const optImg = sanitizeUrl(typeof opt === 'object' ? (opt.img || '') : '', { allowDataImage: true });
+                    
+                    const imgHtml = optImg ? `<img src="${optImg}" class="flag-visual" alt="選項 ${letter}">` : '';
+                    item.innerHTML = `
+                        ${imgHtml}
+                        <div class="flag-label">${letter}. ${escapeHtmlText(optLabel)}</div>
+                    `;
+                    
+                    item.onclick = () => {
+                        document.querySelectorAll('.flag-item').forEach(el => el.classList.remove('active'));
+                        item.classList.add('active');
+                        state.tempSelectedAnswer = letter;
+                    };
+                    
+                    gridEl.appendChild(item);
+                });
+                container.appendChild(gridEl);
+                
+            } else if (puzzleType === 'tide') {
+                // 潮汐資料判讀：隱藏標準輸入框，玩家依時間、水位與狀態選 A/B/C/D
+                ansInput.style.display = 'none';
+                
+                const optionLetters = ['A', 'B', 'C', 'D'];
+                const fallbackTide = [
+                    { key: 'A', time: '12:00', level: 120, state: '漲潮' },
+                    { key: 'B', time: '14:30', level: 80, state: '退潮' },
+                    { key: 'C', time: '16:30', level: 30, state: '乾潮' },
+                    { key: 'D', time: '18:30', level: 70, state: '漲潮' }
+                ];
+                const parseTideOptions = () => fallbackTide.map((fallback, idx) => {
+                    const point = Array.isArray(m.tidePoints) ? m.tidePoints[idx] : null;
+                    if (point && typeof point === 'object') {
+                        return Object.assign({}, fallback, point, { key: fallback.key });
+                    }
+                    const opt = Array.isArray(m.puzzleOptions) ? String(m.puzzleOptions[idx] || '') : '';
+                    const timeMatch = opt.match(/(\d{1,2}:\d{2})/);
+                    const stateMatch = opt.match(/(漲潮|退潮|滿潮|乾潮)/);
+                    return Object.assign({}, fallback, {
+                        time: timeMatch ? timeMatch[1].padStart(5, '0') : fallback.time,
+                        state: stateMatch ? stateMatch[1] : fallback.state
+                    });
+                });
+                const tidePoints = parseTideOptions();
+                const levels = tidePoints.map(p => Number(p.level));
+                const minLevel = Math.min(...levels);
+                const maxLevel = Math.max(...levels);
+                const spread = Math.max(1, maxLevel - minLevel);
+                const xPositions = [55, 150, 245, 340];
+                const coords = tidePoints.map((point, index) => {
+                    const y = 150 - ((Number(point.level) - minLevel) / spread) * 95;
+                    return Object.assign({}, point, { x: xPositions[index], y });
+                });
+                const path = coords.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x},${point.y}`).join(' ');
+
+                const tideChart = document.createElement('div');
+                tideChart.className = 'tide-chart-container';
+                tideChart.innerHTML = `
+                    <svg class="tide-svg-box" viewBox="0 0 400 230">
+                        <line class="tide-baseline" x1="28" y1="150" x2="372" y2="150" />
+                        <text x="310" y="142" fill="rgba(255,255,255,0.4)" font-size="10">相對水位</text>
+                        <path class="tide-wave-path" d="${path}" />
+                        ${coords.map(point => {
+                            return `
+                                <line x1="${point.x}" y1="40" x2="${point.x}" y2="178" stroke="rgba(255,255,255,0.1)" stroke-width="1" stroke-dasharray="2,2" />
+                                <circle class="tide-dot" cx="${point.x}" cy="${point.y}" r="6" />
+                                <text x="${point.x}" y="197" fill="rgba(255,255,255,0.82)" font-size="11" font-weight="bold" text-anchor="middle">${point.key} ${point.time}</text>
+                                <text x="${point.x}" y="214" fill="rgba(255,255,255,0.52)" font-size="10" text-anchor="middle">${point.state} / ${point.level}</text>
+                            `;
+                        }).join('')}
+                    </svg>
+                `;
+                container.appendChild(tideChart);
+                
+                const choiceGrid = document.createElement('div');
+                choiceGrid.className = 'choice-grid';
+                
+                tidePoints.forEach((point, idx) => {
+                    const letter = point.key || optionLetters[idx];
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerHTML = `
+                        <span>${letter}. ${point.time}</span>
+                        <span style="font-size: 0.85rem; opacity: 0.72;">${point.state} / 水位 ${point.level}</span>
+                    `;
+                    
+                    btn.onclick = () => {
+                        document.querySelectorAll('.choice-btn').forEach(el => el.classList.remove('active'));
+                        btn.classList.add('active');
+                        state.tempSelectedAnswer = letter;
+                    };
+                    choiceGrid.appendChild(btn);
+                });
+                container.appendChild(choiceGrid);
+                
+            } else if (puzzleType === 'violation') {
+                // 影像违規安全糾察：隱藏標準輸入框
+                ansInput.style.display = 'none';
+                
+                // 1. CCTV 影像容器
+                const cctvContainer = document.createElement('div');
+                cctvContainer.className = 'violation-container';
+                
+                const cctvImg = sanitizeUrl(m.puzzleImg || m.landmarkImg || firstImageUrl(m.storyImg) || '', { allowDataImage: true });
+                if (cctvImg) {
+                    cctvContainer.style.backgroundImage = `url('${cctvImg}')`;
+                } else {
+                    cctvContainer.style.backgroundColor = '#111';
+                }
+                
+                cctvContainer.innerHTML = `
+                    <div class="scan-line"></div>
+                    <div class="cctv-overlay-text">CAM-04 BEACH MONITOR</div>
+                    <div class="cctv-overlay-rec">
+                        <div class="rec-dot"></div>
+                        <span>REC</span>
+                    </div>
+                `;
+                container.appendChild(cctvContainer);
+                
+                // 2. A, B, C, D 選項按鈕組
+                const choiceGrid = document.createElement('div');
+                choiceGrid.className = 'choice-grid';
+                
+                const options = m.puzzleOptions || ["A. 2處", "B. 3處", "C. 4處", "D. 5處"];
+                const optionLetters = ['A', 'B', 'C', 'D'];
+                
+                options.forEach((opt, idx) => {
+                    const letter = optionLetters[idx];
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerHTML = `
+                        <span>${opt}</span>
+                        <span style="font-size: 0.85rem; opacity: 0.6;">選取</span>
+                    `;
+                    
+                    btn.onclick = () => {
+                        document.querySelectorAll('.choice-btn').forEach(el => el.classList.remove('active'));
+                        btn.classList.add('active');
+                        state.tempSelectedAnswer = letter;
+                    };
+                    choiceGrid.appendChild(btn);
+                });
+                container.appendChild(choiceGrid);
+                
+            } else if (puzzleType === 'sos') {
+                // 國際摩斯密碼求救判讀：隱藏標準輸入框
+                ansInput.style.display = 'none';
+                
+                // 1. 符號對照表
+                const refTable = document.createElement('div');
+                refTable.className = 'sos-ref-container';
+                refTable.innerHTML = `
+                    <div class="sos-ref-title">國際求救訊號符號對照表</div>
+                    <table class="sos-table">
+                        <thead>
+                            <tr>
+                                <th>訊號字元</th>
+                                <th>摩斯編碼符號</th>
+                                <th>解譯說明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="sos-symbol">S</td>
+                                <td>★★★</td>
+                                <td>三短音 (★ 為短音)</td>
+                            </tr>
+                            <tr>
+                                <td class="sos-symbol">O</td>
+                                <td>🌙🌙🌙</td>
+                                <td>三長音 (🌙 為長音)</td>
+                            </tr>
+                            <tr>
+                                <td class="sos-symbol">S</td>
+                                <td>★★★</td>
+                                <td>三短音 (★ 為短音)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                `;
+                container.appendChild(refTable);
+                
+                // 2. 摩斯排列組合按鈕組
+                const choiceGrid = document.createElement('div');
+                choiceGrid.className = 'choice-grid';
+                
+                const options = m.puzzleOptions || ["A. ★★／🌙🌙／★★", "B. ★★★／🌙🌙🌙／★★★", "C. 🌙🌙🌙／★★★／🌙🌙🌙", "D. ★🌙★／🌙★🌙／★🌙★"];
+                const optionLetters = ['A', 'B', 'C', 'D'];
+                
+                options.forEach((opt, idx) => {
+                    const letter = optionLetters[idx];
+                    const btn = document.createElement('button');
+                    btn.className = 'choice-btn';
+                    btn.innerHTML = `
+                        <span>${opt}</span>
+                        <span style="font-size: 0.85rem; opacity: 0.6;">發射訊號</span>
+                    `;
+                    
+                    btn.onclick = () => {
+                        document.querySelectorAll('.choice-btn').forEach(el => el.classList.remove('active'));
+                        btn.classList.add('active');
+                        state.tempSelectedAnswer = letter;
+                    };
+                    choiceGrid.appendChild(btn);
+                });
+                container.appendChild(choiceGrid);
+            } else if (puzzleType === 'sort') {
+                // 邏輯排序：隱藏標準輸入框
+                ansInput.style.display = 'none';
+                
+                const sortContainer = document.createElement('div');
+                sortContainer.className = 'sort-list-container';
+                
+                // 動態取得後台設定的玩家可見順序。
+                let items = [...(m.puzzleOptions || [])];
+                
+                items.forEach((itemText) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'sort-item';
+                    itemEl.draggable = true;
+                    itemEl.dataset.value = itemText;
+                    itemEl.innerHTML = `
+                        <div class="sort-item-handle">☰</div>
+                        <div style="font-size: 0.95rem;">${itemText}</div>
+                    `;
+                    sortContainer.appendChild(itemEl);
+                });
+                
+                container.appendChild(sortContainer);
+                bindSortEvents(sortContainer);
+                updateSortResult(sortContainer);
+
+                const helperButton = document.createElement('button');
+                helperButton.type = 'button';
+                helperButton.textContent = '使用排序校正提示';
+                helperButton.style.cssText = 'width:100%; margin-top:12px; padding:11px 14px; border:1px solid rgba(117,183,170,0.45); border-radius:8px; background:rgba(117,183,170,0.1); color:var(--accent-teal); font-weight:bold; cursor:pointer;';
+                helperButton.onclick = () => showSortMisplacedHint(sortContainer, m, helperButton);
+                container.appendChild(helperButton);
+                
+            } else if (puzzleType === 'drag') {
+                // 拖曳配對：隱藏標準輸入框
+                ansInput.style.display = 'none';
+                
+                const dragBoard = document.createElement('div');
+                dragBoard.className = 'drag-board-container';
+                
+                const canvas = document.createElement('div');
+                canvas.className = 'drag-match-canvas';
+                
+                const bgImg = sanitizeUrl(m.puzzleImg || m.landmarkImg || '', { allowDataImage: true });
+                if (bgImg) {
+                    canvas.style.backgroundImage = `url('${bgImg}')`;
+                } else {
+                    canvas.style.backgroundColor = '#111';
+                }
+                
+                // 渲染熱區插槽 (slots) 與可拖曳組件
+                const slotsData = (m.puzzleOptions || []).filter(slot => slot && (slot.label || slot.img)); 
+                canvas.dataset.totalTargets = String(slotsData.length);
+                
+                // 建立拖曳對象 dock
+                const dock = document.createElement('div');
+                dock.style.display = 'flex';
+                dock.style.justifyContent = 'center';
+                dock.style.flexWrap = 'wrap';
+                dock.style.gap = '15px';
+                dock.style.marginTop = '15px';
+                dock.style.padding = '10px';
+                dock.style.background = 'rgba(255,255,255,0.02)';
+                dock.style.borderRadius = '8px';
+                
+                dragBoard.appendChild(canvas);
+                dragBoard.appendChild(dock);
+                
+                slotsData.forEach((slot, index) => {
+                    // 熱區插槽
+                    const slotEl = document.createElement('div');
+                    slotEl.className = 'drag-zone-target';
+                    slotEl.dataset.index = index;
+                    const tolerance = Math.max(2, Math.min(50, parseFloat(slot.tolerance) || 10));
+                    slotEl.dataset.tolerance = String(tolerance);
+                    slotEl.style.left = `${slot.x || 50}%`;
+                    slotEl.style.top = `${slot.y || 50}%`;
+                    slotEl.style.width = `${tolerance * 2}%`;
+                    slotEl.style.height = `${tolerance * 2}%`;
+                    slotEl.innerHTML = index + 1;
+                    slotEl.title = `${slot.label || `道具 ${index + 1}`} / 容許範圍 ${tolerance}%`;
+                    canvas.appendChild(slotEl);
+                    
+                    // 可拖曳元件
+                    const dragItem = document.createElement('div');
+                    dragItem.className = 'drag-movable-item';
+                    dragItem.dataset.index = index;
+                    dragItem.style.position = 'relative';
+                    dragItem.style.left = '0px';
+                    dragItem.style.top = '0px';
+                    dragItem.style.transform = 'none';
+                    dragItem.title = slot.label || `道具 ${index + 1}`;
+                    const slotImg = sanitizeUrl(slot.img || '', { allowDataImage: true });
+                    if (slotImg) {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = slotImg;
+                        imgEl.style.width = '100%';
+                        imgEl.style.height = '100%';
+                        imgEl.style.objectFit = 'cover';
+                        imgEl.style.borderRadius = '6px';
+                        imgEl.draggable = false;
+                        dragItem.appendChild(imgEl);
+                    } else {
+                        dragItem.textContent = slot.label || (index + 1);
+                    }
+                    dock.appendChild(dragItem);
+                });
+                
+                container.appendChild(dragBoard);
+                bindDragEvents(canvas, dock);
+                updateDragResult(canvas);
+            }
+        }
+
+        // 📡 GPS 定位輔助公式與處理
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371e3; // 地球半徑 (公尺)
+            const phi1 = lat1 * Math.PI / 180;
+            const phi2 = lat2 * Math.PI / 180;
+            const deltaPhi = (lat2 - lat1) * Math.PI / 180;
+            const deltaLambda = (lon2 - lon1) * Math.PI / 180;
+            
+            const a = Math.sin(deltaPhi/2) * Math.sin(deltaPhi/2) +
+                      Math.cos(phi1) * Math.cos(phi2) *
+                      Math.sin(deltaLambda/2) * Math.sin(deltaLambda/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            
+            return R * c; // 回傳公尺數
+        }
+
+        function renderGpsVerification(lat, lng, m) {
+            const d = calculateDistance(lat, lng, parseFloat(m.gpsLat), parseFloat(m.gpsLng));
+            const radius = parseFloat(m.gpsRadius) || 50;
+            
+            const distText = document.getElementById('gps-distance-text');
+            if (distText) distText.innerText = Math.round(d) + " m";
+            
+            const statusText = document.getElementById('gps-status-text');
+            const submitBtn = document.getElementById('submit-btn');
+            
+            if (d <= radius) {
+                if (statusText) statusText.innerText = "🛰️ 已進入圖騰感應範圍！";
+                if (statusText) statusText.style.color = "var(--pass-green)";
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                }
+            } else {
+                if (statusText) statusText.innerText = "🛰️ 圖騰定位偏移，請繼續靠近目的地...";
+                if (statusText) statusText.style.color = "var(--accent-teal)";
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+
+        function mockGpsUnlock() {
+            if (state.gpsWatchId) {
+                navigator.geolocation.clearWatch(state.gpsWatchId);
+                state.gpsWatchId = null;
+            }
+            
+            const distText = document.getElementById('gps-distance-text');
+            if (distText) distText.innerText = "0 m";
+            
+            const statusText = document.getElementById('gps-status-text');
+            if (statusText) {
+                statusText.innerText = "🛰️ 密鑰模擬抵達成功！";
+                statusText.style.color = "var(--pass-green)";
+            }
+            
+            const submitBtn = document.getElementById('submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.style.opacity = '1';
+                submitBtn.style.cursor = 'pointer';
+            }
+        }
+
+        // 🌳 抉擇分支選擇器
+        function selectStoryBranch(branchTag) {
+            if (!state.unlockedBranches) state.unlockedBranches = [];
+            if (!state.unlockedBranches.includes(branchTag)) {
+                state.unlockedBranches.push(branchTag);
+            }
+            saveState();
+            DullesData.updatePlayerProgress(state.teamName, state.activeMId, `選擇分支: ${branchTag}`, true, branchTag);
+            completePostStory();
+        }
+
+        // 🔀 邏輯排序謎題事件綁定
+        function bindSortEvents(container) {
+            let dragEl = null;
+            
+            // 桌面端拖曳
+            container.addEventListener('dragstart', (e) => {
+                dragEl = e.target.closest('.sort-item');
+                if (dragEl) {
+                    e.dataTransfer.effectAllowed = 'move';
+                    dragEl.style.opacity = '0.5';
+                }
+            });
+            
+            container.addEventListener('dragend', () => {
+                if (dragEl) {
+                    dragEl.style.opacity = '1';
+                    dragEl = null;
+                    updateSortResult(container);
+                }
+            });
+            
+            container.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const target = e.target.closest('.sort-item');
+                if (target && target !== dragEl) {
+                    const rect = target.getBoundingClientRect();
+                    const next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+                    container.insertBefore(dragEl, next ? target.nextSibling : target);
+                }
+            });
+
+            // 觸控端拖曳相容
+            let touchDragEl = null;
+            
+            container.addEventListener('touchstart', (e) => {
+                const item = e.target.closest('.sort-item');
+                if (item) {
+                    touchDragEl = item;
+                    item.style.background = 'rgba(255, 215, 0, 0.1)';
+                }
+            }, { passive: true });
+            
+            container.addEventListener('touchmove', (e) => {
+                if (!touchDragEl) return;
+                e.preventDefault();
+                const touchY = e.touches[0].clientY;
+                const items = Array.from(container.querySelectorAll('.sort-item')).filter(el => el !== touchDragEl);
+                
+                let sibling = items.find(item => {
+                    const rect = item.getBoundingClientRect();
+                    return touchY < (rect.top + rect.height / 2);
+                });
+                
+                container.insertBefore(touchDragEl, sibling || null);
+            }, { passive: false });
+            
+            container.addEventListener('touchend', () => {
+                if (touchDragEl) {
+                    touchDragEl.style.background = '';
+                    touchDragEl = null;
+                    updateSortResult(container);
+                }
+            });
+        }
+
+        function updateSortResult(container) {
+            const items = Array.from(container.querySelectorAll('.sort-item'));
+            const values = items.map(el => el.dataset.value);
+            items.forEach(item => {
+                item.classList.remove('sort-item-position-error');
+                item.querySelector('.sort-position-status')?.remove();
+            });
+            state.tempSortOrder = values;
+            // 寫入為逗號分隔的字串答案
+            document.getElementById('ans-input').value = values.join(',');
+        }
+
+        function getSortExpectedOrder(puzzle) {
+            const fromAnswer = (value) => String(value || '')
+                .split(',')
+                .map(item => item.trim())
+                .filter(Boolean);
+            if (Array.isArray(puzzle.answers) && puzzle.answers.length) {
+                const expected = fromAnswer(puzzle.answers[0]);
+                if (expected.length >= 2) return expected;
+            }
+            const expected = fromAnswer(puzzle.answer);
+            if (expected.length >= 2) return expected;
+            return Array.isArray(puzzle.puzzleOptions) ? puzzle.puzzleOptions.map(item => String(item)) : [];
+        }
+
+        function showSortMisplacedHint(container, puzzle, button) {
+            const expected = getSortExpectedOrder(puzzle);
+            const items = Array.from(container.querySelectorAll('.sort-item'));
+            let misplacedCount = 0;
+            items.forEach((item, index) => {
+                const misplaced = String(item.dataset.value) !== expected[index];
+                item.classList.toggle('sort-item-position-error', misplaced);
+                item.querySelector('.sort-position-status')?.remove();
+                if (misplaced) {
+                    const status = document.createElement('span');
+                    status.className = 'sort-position-status';
+                    status.textContent = '位置錯誤';
+                    item.appendChild(status);
+                }
+                item.dataset.misplaced = misplaced ? 'true' : 'false';
+                if (misplaced) misplacedCount += 1;
+            });
+            button.textContent = misplacedCount ? `已標示 ${misplacedCount} 個需要調整的步驟` : '目前排序正確';
+            if (DullesData.recordHintUse) {
+                DullesData.recordHintUse(state.teamName, puzzle.id, 'sort-position-check', `排序校正：${misplacedCount} 個位置需要調整`);
+            }
+        }
+
+        // 🎯 拖曳配對謎題事件綁定 (Touch & Mouse 相容)
+        function bindDragEvents(canvas, dock) {
+            const items = dock.querySelectorAll('.drag-movable-item');
+            const targets = canvas.querySelectorAll('.drag-zone-target');
+            
+            items.forEach((item) => {
+                let isDragging = false;
+                let startX = 0;
+                let startY = 0;
+                let origLeft = 0;
+                let origTop = 0;
+                
+                // 初始化位置屬性
+                item.style.position = 'absolute';
+                
+                const onStart = (clientX, clientY) => {
+                    isDragging = true;
+                    item.style.zIndex = '1000';
+                    startX = clientX;
+                    startY = clientY;
+                    
+                    // 若尚未移入畫布，將其加入畫布進行绝对定位
+                    if (item.parentNode !== canvas) {
+                        const rect = item.getBoundingClientRect();
+                        const canvasRect = canvas.getBoundingClientRect();
+                        
+                        origLeft = rect.left - canvasRect.left + rect.width / 2;
+                        origTop = rect.top - canvasRect.top + rect.height / 2;
+                        
+                        canvas.appendChild(item);
+                        item.style.left = `${origLeft}px`;
+                        item.style.top = `${origTop}px`;
+                        item.style.transform = 'translate(-50%, -50%)';
+                    } else {
+                        origLeft = parseFloat(item.style.left);
+                        origTop = parseFloat(item.style.top);
+                    }
+                };
+                
+                const onMove = (clientX, clientY) => {
+                    if (!isDragging) return;
+                    const deltaX = clientX - startX;
+                    const deltaY = clientY - startY;
+                    item.style.left = `${origLeft + deltaX}px`;
+                    item.style.top = `${origTop + deltaY}px`;
+                };
+                
+                const onEnd = () => {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    item.style.zIndex = '10';
+                    
+                    // 比對是否進入對應插槽的容許範圍
+                    const itemIdx = item.dataset.index;
+                    const target = Array.from(targets).find(t => t.dataset.index === itemIdx);
+                    
+                    if (target) {
+                        const canvasRect = canvas.getBoundingClientRect();
+                        const targetXPercent = parseFloat(target.style.left) || 50;
+                        const targetYPercent = parseFloat(target.style.top) || 50;
+                        const tolerance = parseFloat(target.dataset.tolerance) || 10;
+                        
+                        const targetX = canvasRect.width * targetXPercent / 100;
+                        const targetY = canvasRect.height * targetYPercent / 100;
+                        
+                        const itemLeft = parseFloat(item.style.left);
+                        const itemTop = parseFloat(item.style.top);
+                        const itemXPercent = itemLeft / canvasRect.width * 100;
+                        const itemYPercent = itemTop / canvasRect.height * 100;
+                        
+                        const distPercent = Math.hypot(itemXPercent - targetXPercent, itemYPercent - targetYPercent);
+                        if (distPercent <= tolerance) {
+                            // 吸附對齊
+                            item.style.left = `${targetX}px`;
+                            item.style.top = `${targetY}px`;
+                            target.classList.add('matched');
+                            item.dataset.matched = 'true';
+                        } else {
+                            target.classList.remove('matched');
+                            item.dataset.matched = 'false';
+                        }
+                    }
+                    
+                    updateDragResult(canvas);
+                };
+                
+                // 滑鼠事件
+                item.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    onStart(e.clientX, e.clientY);
+                    
+                    const moveHandler = (moveEv) => {
+                        onMove(moveEv.clientX, moveEv.clientY);
+                    };
+                    
+                    const upHandler = () => {
+                        onEnd();
+                        document.removeEventListener('mousemove', moveHandler);
+                        document.removeEventListener('mouseup', upHandler);
+                    };
+                    
+                    document.addEventListener('mousemove', moveHandler);
+                    document.addEventListener('mouseup', upHandler);
+                });
+                
+                // 觸控事件
+                item.addEventListener('touchstart', (e) => {
+                    const touch = e.touches[0];
+                    onStart(touch.clientX, touch.clientY);
+                }, { passive: true });
+                
+                item.addEventListener('touchmove', (e) => {
+                    if (!isDragging) return;
+                    const touch = e.touches[0];
+                    onMove(touch.clientX, touch.clientY);
+                }, { passive: true });
+                
+                item.addEventListener('touchend', () => {
+                    onEnd();
+                });
+            });
+        }
+
+        function updateDragResult(canvas) {
+            const items = Array.from(canvas.querySelectorAll('.drag-movable-item'));
+            const total = parseInt(canvas.dataset.totalTargets || '0', 10);
+            const matched = items.filter(el => el.dataset.matched === 'true').length;
+            
+            // 當全部配對成功時，寫入 "PASS" 自動通關密鑰
+            if (total > 0 && matched === total) {
+                document.getElementById('ans-input').value = "PASS";
+            } else {
+                document.getElementById('ans-input').value = "";
+            }
+        }
+
+        function renderPuzzleHints(m) {
+            const box = document.getElementById('puzzle-hint-box');
+            const list = document.getElementById('puzzle-hint-list');
+            const btn = document.getElementById('puzzle-hint-btn');
+            const hints = Array.isArray(m.hints) ? m.hints.filter(Boolean) : [];
+            if (!box || !list || !btn) return;
+            if (!hints.length) {
+                box.style.display = 'none';
+                list.innerHTML = '';
+                return;
+            }
+            box.style.display = 'block';
+            const count = Math.min(state.visibleHints?.[m.id] || 0, hints.length);
+            list.innerHTML = hints.slice(0, count).map((hint, index) => `
+                <div style="padding:10px 12px; border-radius:10px; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08);">
+                    <strong style="color:var(--accent-yellow);">提示 ${index + 1}</strong><br>${parseMarkdown(hint)}
+                </div>
+            `).join('');
+            btn.style.display = count >= hints.length ? 'none' : 'inline-flex';
+            btn.textContent = count ? `查看下一個提示 (${count + 1}/${hints.length})` : `查看提示 (1/${hints.length})`;
+        }
+
+        function showNextPuzzleHint() {
+            const m = activePuzzles.find(x => x.id === state.activeMId);
+            if (!m) return;
+            const hints = Array.isArray(m.hints) ? m.hints.filter(Boolean) : [];
+            if (!hints.length) return;
+            state.visibleHints = state.visibleHints || {};
+            const nextCount = Math.min((state.visibleHints[m.id] || 0) + 1, hints.length);
+            state.visibleHints[m.id] = nextCount;
+            saveState();
+            if (DullesData.recordHintUse) {
+                DullesData.recordHintUse(state.teamName, m.id, nextCount, hints[nextCount - 1] || '');
+            }
+            renderPuzzleHints(m);
+        }
+
+        async function verifyAnswer() {
+            const m = activePuzzles.find(x => x.id === state.activeMId);
+            if (!m) return;
+            
+            const puzzleType = m.puzzleType || 'text';
+            let rawInput = '';
+            
+            if (['choice', 'flag', 'tide', 'violation', 'sos'].includes(puzzleType)) {
+                rawInput = state.tempSelectedAnswer || '';
+            } else {
+                rawInput = document.getElementById('ans-input').value.trim();
+            }
+
+            const input = rawInput.toUpperCase();
+            if (!input) {
+                const errEl = document.getElementById('puzzle-error');
+                errEl.innerText = "請先選擇或輸入答案！";
+                errEl.style.display = 'block';
+                return;
+            }
+            
+            let isCorrect = false;
+            if (puzzleType === 'sort') {
+                const expectedOrder = getSortExpectedOrder(m);
+                const submittedOrder = Array.isArray(state.tempSortOrder)
+                    ? state.tempSortOrder.map(item => String(item))
+                    : rawInput.split(',').map(item => item.trim());
+                rawInput = submittedOrder.join(',');
+                if (DullesData.isServerMode && DullesData.isServerMode() && DullesData.verifyPuzzleAnswer) {
+                    isCorrect = await DullesData.verifyPuzzleAnswer(m.id, rawInput);
+                } else {
+                    isCorrect = expectedOrder.length >= 2
+                        && expectedOrder.length === submittedOrder.length
+                        && expectedOrder.every((item, index) => item === submittedOrder[index]);
+                }
+            } else if (DullesData.isServerMode && DullesData.isServerMode() && DullesData.verifyPuzzleAnswer) {
+                isCorrect = await DullesData.verifyPuzzleAnswer(m.id, rawInput);
+            } else if (m.answers) {
+                isCorrect = m.answers.map(a => String(a || '').toUpperCase()).includes(input);
+            } else if (m.answer) {
+                isCorrect = (input === String(m.answer || '').toUpperCase());
+            }
+
+            if (isCorrect) {
+                if (!state.completedMissions.includes(m.id)) {
+                    state.completedMissions.push(m.id);
+                }
+                
+                // 動態判定是否為最後的終章通關
+                const finalPuzzle = getFinalPuzzle();
+                if (m.id === finalPuzzle.id) {
+                    state.endTime = Date.now();
+                }
+                
+                // 回報成功通關至後端與更新狀態
+                DullesData.updatePlayerProgress(state.teamName, m.id, `任務 #0${m.id} PASS`, true, rawInput);
+                
+                saveState();
+                if (m.postStory) {
+                    openLevel(m.id, 'postStory');
+                } else {
+                    completePostStory();
+                }
+            } else {
+                // 回報答錯嘗試
+                DullesData.updatePlayerProgress(state.teamName, m.id, `答錯: ${rawInput}`, false, rawInput);
+
+                const errEl = document.getElementById('puzzle-error');
+                errEl.innerText = m.errorMsg || "驗證失敗，密鑰不符。";
+                errEl.style.display = 'block';
+            }
+        }
+
+        function completePostStory() {
+            const finalPuzzle = getFinalPuzzle();
+            if (state.activeMId === finalPuzzle.id) {
+                navigateTo('final-success-screen');
+            } else {
+                navigateTo('mission-screen');
+            }
+        }
+
+        // 渲染圖騰庫 (動態與已啟用的關卡同步)
+        function renderTotems() {
+            const container = document.getElementById('archive-list');
+            if (!state.isStarted || !container) return;
+            
+            // 僅顯示常規任務的圖騰 (排除最後一個終章)
+            const finalPuzzle = getFinalPuzzle();
+            const regularPuzzles = activePuzzles.filter(m => m.id !== finalPuzzle.id);
+
+            container.innerHTML = regularPuzzles.map(m => {
+                const isUnlocked = state.completedMissions.includes(m.id);
+                const imgUrl = sanitizeUrl(m.totemImg || m.postStoryImg || '', { allowDataImage: true });
+                const chapterText = escapeHtmlText(m.chapter || '');
+                const nameText = escapeHtmlText(m.name || '');
+                const descText = escapeHtmlText((m.totemDesc || m.postStory || '').replace(/\\n/g, '\n'));
+                
+                if (isUnlocked) {
+                    const imgHtml = imgUrl ? `<div style="display:block; margin: 12px 0; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); border-radius: 12px; overflow: hidden; text-align: center; padding: 5px;"><img src="${imgUrl}" style="max-height: 140px; width: auto; margin: 0 auto; border-radius: 8px; display: block;"></div>` : '';
+                    return `
+                        <div style="padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.12); margin-bottom:16px;">
+                            <div style="font-weight:700; color:var(--accent-yellow); font-size:0.95rem; display: flex; align-items: center; gap: 8px;">
+                                <span>✨ MISSION #0${m.id} ${chapterText} - ${nameText}</span>
+                            </div>
+                            ${imgHtml}
+                            <p style="font-size:0.85rem; color:var(--text-white); line-height:1.7; white-space: pre-wrap; margin-top: 8px;">${descText}</p>
+                        </div>
+                    `;
+                } else {
+                    return `
+                        <div style="padding-bottom:16px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:16px; opacity: 0.35;">
+                            <div style="font-weight:700; color:var(--text-dim); font-size:0.95rem; display: flex; align-items: center; gap: 8px;">
+                                <span>🔒 MISSION #0${m.id} 未喚醒</span>
+                            </div>
+                            <p style="font-size:0.8rem; color:var(--text-dim); line-height:1.6; margin-top: 5px;">解鎖對應任務，尋回座標，即可讀取此處的圖騰資料。</p>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        function openOverlay(id) { 
+            if (id === 'archive-overlay') {
+                renderTotems();
+            }
+            const el = document.getElementById(id);
+            if (el) {
+                el.style.display = 'block'; 
+            }
+        }
+        
+        function closeOverlay() { 
+            document.querySelectorAll('.overlay').forEach(o => o.style.display = 'none'); 
+        }
+        
+        function resetGame() { 
+            closeOverlay();
+            document.getElementById('confirm-dialog').style.display = 'block';
+        }
+
+        function closeConfirmDialog() {
+            document.getElementById('confirm-dialog').style.display = 'none';
+        }
+
+        function executeReset() {
+            localStorage.removeItem(STORAGE_KEY); 
+            location.reload();
+        }
+
+        // 網頁加載驅動計時器
+        window.onload = async () => {
+            await syncBackendDataForDisplay();
+            applyGlobalConfig();
+            
+            // 每秒偵測是否有 CMS 資料更新以更新背景
+            setInterval(async () => {
+                await syncBackendDataForDisplay();
+                const latestConfig = DullesData.getConfig();
+                const latestPuzzles = DullesData.getPuzzles();
+                if (JSON.stringify(latestConfig) !== JSON.stringify(globalConfig) || JSON.stringify(latestPuzzles) !== JSON.stringify(missionData)) {
+                    applyGlobalConfig();
+                }
+            }, 1500);
+
+            let p = 0; 
+            const bar = document.getElementById('progress-bar');
+            const loadTimer = setInterval(() => { 
+                p += 10; 
+                if (p >= 100) { 
+                    p = 100; 
+                    clearInterval(loadTimer); 
+                    setTimeout(() => { 
+                        if (isInternalTestMode()) {
+                            startInternalTestJourney();
+                            return;
+                        }
+                        loadState();
+                        const resumeDialog = document.getElementById('resume-dialog');
+                        if (!resumeDialog || resumeDialog.style.display === 'none' || !resumeDialog.style.display) {
+                            navigateTo('main-screen'); 
+                        }
+                    }, 500); 
+                }
+                if (bar) {
+                    bar.style.strokeDashoffset = 314 - (p/100)*314; 
+                }
+                const percentVal = document.getElementById('percent-val');
+                if (percentVal) {
+                    percentVal.innerText = p; 
+                }
+            }, 40);
+        };
+    </script>
 </body>
 </html>

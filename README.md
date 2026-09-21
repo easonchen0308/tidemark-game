@@ -1,16 +1,17 @@
-# 絕對傳奇：潮痕試煉靜態前台
+# 絕對傳奇：潮痕試煉｜GitHub Pages 前台
 
 這是明天活動可用的 GitHub Pages 單頁版。它不需要 Render、Node.js 或資料庫。
 
 ## 發布
 
-在 GitHub 專案的 Settings → Pages，將來源設為 `Deploy from a branch`，選擇 `main` 分支與 `/docs` 資料夾。發布網址會是：
+在 GitHub 專案的 Settings → Pages，將來源設為 `Deploy from a branch`，選擇 `main` 分支與 `/(root)` 資料夾。發布網址會是：
 
-`https://easonchen0308.github.io/LocalQuestPlatform/tidemark/`
+`https://easonchen0308.github.io/tidemark-game/`
 
 ## 行為
 
-- 首頁輸入隊名後進入遊戲。
+- 完整沿用原本正式前台介面與逐頁任務流程。
+- 首頁進入後輸入隊名，不需要 Render 或活動密碼。
 - 進度會保留在同一支手機的瀏覽器；重新整理不會消失。
 - 不會送出、收集或儲存玩家個資。
 - 關卡、圖片連結、過關敘事與結局都固定在 `game-data.js`。
