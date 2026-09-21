@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#08171e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>絕對傳奇：潮痕試煉</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink:#edf5f2; --muted:#a7bbb9; --paper:#f6edd7; --sea:#0b2932; --sea-deep:#06151b; --line:rgba(184,222,212,.24); --gold:#e9be70; --cyan:#81d7d7; --danger:#ea8e81; }
+    * { box-sizing:border-box; }
+    html { background:var(--sea-deep); }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:"Noto Sans TC",sans-serif; background:linear-gradient(180deg,rgba(5,18,24,.82),rgba(5,18,24,.97)),var(--page-bg) center top/cover fixed; }
+    button,input { font:inherit; }
+    button { cursor:pointer; }
+    .app { width:min(760px,100%); min-height:100vh; margin:0 auto; padding:env(safe-area-inset-top) 16px calc(28px + env(safe-area-inset-bottom)); background:rgba(5,18,24,.76); }
+    .hero { min-height:100vh; display:grid; place-items:center; padding:28px 4px; }
+    .welcome { width:100%; text-align:center; }
+    .logo { display:block; width:min(300px,76vw); max-height:140px; object-fit:contain; margin:0 auto 18px; }
+    .eyebrow { color:var(--cyan); font-size:.78rem; letter-spacing:.13em; margin:0 0 8px; }
+    h1,h2,h3 { font-family:"Noto Serif TC",serif; margin:0; letter-spacing:0; }
+    h1 { font-size:clamp(2rem,7vw,3.35rem); line-height:1.18; }
+    h2 { font-size:1.55rem; }
+    h3 { font-size:1.12rem; }
+    .sub { color:var(--gold); margin:12px auto 0; max-width:34em; }
+    .intro { color:var(--muted); text-align:left; white-space:pre-line; line-height:1.75; margin:26px auto; max-width:38em; }
+    .panel { background:rgba(13,38,46,.82); border:1px solid var(--line); border-radius:10px; padding:18px; box-shadow:0 18px 48px rgba(0,0,0,.22); }
+    .setup { max-width:490px; margin:0 auto; text-align:left; }
+    label { display:block; color:var(--muted); font-size:.85rem; margin-bottom:8px; }
+    input { width:100%; padding:14px 15px; color:var(--ink); border:1px solid rgba(129,215,215,.48); border-radius:7px; background:#071c23; outline:none; }
+    input:focus { border-color:var(--cyan); box-shadow:0 0 0 3px rgba(129,215,215,.13); }
+    .button-row { display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
+    .btn { border:1px solid transparent; border-radius:7px; padding:11px 16px; min-height:44px; color:#06161c; background:var(--cyan); font-weight:700; }
+    .btn:hover { filter:brightness(1.08); }
+    .btn-secondary { color:var(--ink); background:rgba(8,28,35,.8); border-color:var(--line); }
+    .btn-gold { color:#20170a; background:var(--gold); }
+    .btn-danger { color:#ffe9e5; background:rgba(132,43,36,.45); border-color:rgba(234,142,129,.55); }
+    .notice { color:var(--muted); font-size:.82rem; line-height:1.6; margin:14px 0 0; }
+    .error { color:#ffd2cc; margin:10px 0 0; min-height:1.5em; }
+    .topbar { position:sticky; top:0; z-index:4; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:13px 0 12px; background:linear-gradient(180deg,rgba(5,18,24,.98),rgba(5,18,24,.85),transparent); }
+    .brand { min-width:0; }
+    .brand strong { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .brand span { color:var(--muted); font-size:.76rem; }
+    .icon-button { width:42px; height:42px; padding:0; color:var(--ink); background:#0d2931; border:1px solid var(--line); border-radius:7px; font-size:1.2rem; }
+    .progress { height:5px; background:#133039; overflow:hidden; border-radius:999px; margin:0 0 18px; }
+    .progress > span { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--cyan),var(--gold)); transition:width .25s ease; }
+    .mission-sheet { position:fixed; inset:0; z-index:10; background:rgba(1,9,12,.72); display:flex; justify-content:center; align-items:flex-end; padding:16px; }
+    .mission-sheet[hidden] { display:none; }
+    .mission-drawer { width:min(720px,100%); max-height:78vh; overflow:auto; padding:18px; background:#0b2229; border:1px solid var(--line); border-radius:10px; box-shadow:0 -10px 48px rgba(0,0,0,.42); }
+    .drawer-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+    .mission-list { display:grid; gap:8px; }
+    .mission-item { width:100%; min-height:64px; text-align:left; display:flex; gap:12px; align-items:center; padding:10px; color:var(--ink); background:#0d2931; border:1px solid var(--line); border-radius:7px; }
+    .mission-item[disabled] { cursor:not-allowed; opacity:.45; }
+    .mission-item.current { border-color:var(--gold); }
+    .mission-item.done { border-color:rgba(114,211,164,.55); }
+    .mission-number { flex:0 0 34px; font-weight:700; color:var(--gold); }
+    .mission-name { min-width:0; flex:1; }
+    .mission-name small { display:block; color:var(--muted); margin-top:2px; }
+    .badge { color:#07221f; background:#8edebc; border-radius:999px; font-size:.72rem; padding:3px 7px; }
+    .badge.locked { color:#9aa9a9; background:#21383c; }
+    .stage { display:grid; gap:14px; }
+    .mission-heading { padding:18px; background:linear-gradient(125deg,rgba(16,55,64,.93),rgba(13,31,37,.93)); border:1px solid var(--line); border-radius:10px; }
+    .chapter { color:var(--cyan); font-size:.8rem; letter-spacing:.1em; margin:0 0 6px; }
+    .story { white-space:pre-line; color:#d8e5e1; line-height:1.8; margin:0; }
+    .art { width:100%; max-height:500px; object-fit:cover; display:block; border:1px solid var(--line); border-radius:8px; background:#06151b; }
+    .story-card { display:grid; gap:14px; }
+    .question { color:#fff5dc; font-size:1.06rem; line-height:1.7; white-space:pre-line; }
+    .choices { display:grid; gap:9px; }
+    .choice { display:flex; align-items:flex-start; gap:10px; width:100%; color:var(--ink); text-align:left; padding:13px; background:#102e37; border:1px solid var(--line); border-radius:7px; }
+    .choice:hover,.choice.selected { border-color:var(--gold); background:rgba(90,67,31,.38); }
+    .choice-letter { flex:0 0 28px; color:#1e1708; background:var(--gold); border-radius:50%; text-align:center; font-weight:700; line-height:28px; }
+    .hint-list { display:grid; gap:8px; margin-top:10px; }
+    .hint { padding:10px; border-left:3px solid var(--cyan); color:#d8e8e5; background:rgba(12,49,57,.7); line-height:1.6; }
+    .answer-feedback { min-height:1.5em; margin:0; color:#ffd3cc; }
+    .success { border-color:rgba(142,222,188,.62); background:rgba(20,76,64,.34); }
+    .success p { color:#ddf4e8; }
+    .totem { color:var(--gold); white-space:pre-line; line-height:1.7; }
+    .finale { text-align:center; padding:8px 0; }
+    .finale img { width:100%; max-height:520px; object-fit:cover; border:1px solid var(--line); border-radius:8px; }
+    .certificate { position:relative; min-height:550px; margin-top:16px; padding:180px 24px 32px; color:#241a0e; background:#e8d0a1 url('assets/completion-certificate.webp') center/cover; border:1px solid rgba(233,190,112,.7); border-radius:8px; overflow:hidden; }
+    .certificate::before { content:""; position:absolute; inset:0; background:rgba(250,239,207,.1); }
+    .certificate > * { position:relative; }
+    .certificate h2 { font-size:clamp(1.55rem,6vw,2.35rem); }
+    .certificate .team { font-family:"Noto Serif TC",serif; font-size:clamp(1.5rem,7vw,2.6rem); margin:30px 0 12px; font-weight:900; }
+    .certificate p { line-height:1.8; margin:8px auto; max-width:21em; }
+    .certificate .certificate-meta { margin-top:38px; font-size:.85rem; }
+    .empty { padding:30px 18px; text-align:center; color:var(--muted); }
+    .footer-note { color:var(--muted); text-align:center; font-size:.75rem; line-height:1.6; margin:22px 0 0; }
+    @media (min-width:700px) { .app { padding-left:28px; padding-right:28px; } .panel { padding:22px; } }
+  </style>
+</head>
+<body>
+  <main class="app" id="app" aria-live="polite"></main>
+  <script src="game-data.js"></script>
+  <script>
+    (() => {
+      const game = window.TIDEMARK_GAME;
+      const app = document.getElementById('app');
+      const storageKey = `tidemark-static-progress-${game.version}`;
+      const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      let state = loadState();
+      let selectedAnswer = '';
+      let drawerOpen = false;
+
+      document.documentElement.style.setProperty('--page-bg', `url("${safeUrl(game.config.bgUrl)}")`);
+
+      function safeUrl(value) {
+        return String(value || '').replace(/["'<>]/g, '');
+      }
+      function escapeHtml(value) {
+        return String(value ?? '').replace(/[&<>'"]/g, char => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', "'":'&#39;', '"':'&quot;' }[char]));
+      }
+      function plainText(value) {
+        const holder = document.createElement('div');
+        holder.innerHTML = String(value || '').replace(/<br\s*\/?>(\s*)/gi, '\n').replace(/<\/div>/gi, '\n');
+        return holder.textContent.replace(/\n{3,}/g, '\n\n').trim();
+      }
+      function toHtml(value) { return escapeHtml(plainText(value)).replace(/\n/g, '<br>'); }
+      function loadState() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(storageKey) || 'null');
+          if (saved && Array.isArray(saved.completed)) return saved;
+        } catch (_) {}
+        return { teamName:'', completed:[], hints:{}, currentId:null, startedAt:null, introSeen:false, endedAt:null };
+      }
+      function saveState() { localStorage.setItem(storageKey, JSON.stringify(state)); }
+      function enabledPuzzles() { return game.puzzles.filter(puzzle => puzzle.enabled !== false); }
+      function isUnlocked(puzzle) {
+        if (state.completed.includes(puzzle.id)) return true;
+        if (puzzle.dependsOn === undefined || puzzle.dependsOn === null || puzzle.dependsOn === '') return true;
+        if (puzzle.dependsOn === 'all') return enabledPuzzles().filter(item => item.id !== puzzle.id).every(item => state.completed.includes(item.id));
+        return state.completed.includes(Number(puzzle.dependsOn));
+      }
+      function currentPuzzle() {
+        const available = enabledPuzzles();
+        return available.find(item => item.id === state.currentId) || available.find(item => isUnlocked(item) && !state.completed.includes(item.id)) || available[available.length - 1];
+      }
+      function nextPuzzle() { return enabledPuzzles().find(item => !state.completed.includes(item.id) && isUnlocked(item)); }
+      function allComplete() { return enabledPuzzles().every(item => state.completed.includes(item.id)); }
+      function progressPercent() { const total = enabledPuzzles().length || 1; return Math.round(state.completed.length / total * 100); }
+      function image(url, alt) { return url ? `<img class="art" src="${safeUrl(url)}" alt="${escapeHtml(alt)}" loading="lazy">` : ''; }
+      function render() {
+        if (!state.teamName) return renderWelcome();
+        if (!state.introSeen) return renderIntro();
+        if (allComplete()) return renderFinale();
+        renderMission();
+      }
+      function renderWelcome() {
+        const config = game.config;
+        app.innerHTML = `<section class="hero"><div class="welcome">
+          ${config.logoUrl ? `<img class="logo" src="${safeUrl(config.logoUrl)}" alt="${escapeHtml(config.titleMain)}">` : ''}
+          <p class="eyebrow">${escapeHtml(config.titleTop || '實境解謎') }</p>
+          <h1>${escapeHtml(config.titleMain || game.name)}</h1>
+          <p class="sub">${escapeHtml(config.regSubtitle || config.titleSub || '')}</p>
+          <p class="intro">${toHtml(config.regDesc || '完成訓練，找回地方留下的六道殘響。')}</p>
+          <div class="panel setup">
+            <label for="team-name">${escapeHtml(config.regTeamNameLabel || '隊伍名稱')}</label>
+            <input id="team-name" maxlength="40" autocomplete="nickname" placeholder="${escapeHtml(config.regTeamNamePlaceholder || '輸入隊伍名稱')}" value="">
+            <p class="notice">此版本完全由 GitHub Pages 提供。進度只會保存在這支手機的瀏覽器內。</p>
+            <p class="error" id="setup-error"></p>
+            <div class="button-row"><button class="btn btn-gold" id="start-game">開始訓練</button></div>
+          </div>
+        </div></section>`;
+        document.getElementById('start-game').addEventListener('click', () => {
+          const name = document.getElementById('team-name').value.trim();
+          if (!name) { document.getElementById('setup-error').textContent = '請先輸入隊伍名稱。'; return; }
+          state.teamName = name; state.startedAt = Date.now(); state.introSeen = !(game.config.prologuePages || []).length; saveState(); render();
+        });
+      }
+      function renderIntro() {
+        const pages = game.config.prologuePages || [];
+        const index = Math.max(0, Math.min(Number(state.introIndex || 0), pages.length - 1));
+        const page = pages[index] || {};
+        app.innerHTML = `<section class="hero"><div class="welcome"><p class="eyebrow">訓練前紀錄 ${index + 1} / ${pages.length}</p><div class="panel story-card">
+          <h1>${escapeHtml(page.title || game.name)}</h1>${image(page.image, page.title || '序章圖片')}<p class="story">${toHtml(page.text || '')}</p>
+          <div class="button-row"><button class="btn btn-secondary" id="skip-intro">略過序章</button><button class="btn btn-gold" id="next-intro">${index === pages.length - 1 ? '進入任務' : '下一頁'}</button></div>
+        </div></div></section>`;
+        document.getElementById('skip-intro').onclick = () => { state.introSeen = true; delete state.introIndex; saveState(); render(); };
+        document.getElementById('next-intro').onclick = () => { if (index >= pages.length - 1) { state.introSeen = true; delete state.introIndex; } else state.introIndex = index + 1; saveState(); render(); };
+      }
+      function renderTopbar() {
+        return `<header class="topbar"><div class="brand"><strong>${escapeHtml(game.name)}</strong><span>${escapeHtml(state.teamName)} · ${state.completed.length} / ${enabledPuzzles().length} 已完成</span></div><button class="icon-button" id="mission-menu" aria-label="任務列表">☰</button></header><div class="progress"><span style="width:${progressPercent()}%"></span></div>`;
+      }
+      function renderMission() {
+        const puzzle = currentPuzzle();
+        if (!puzzle) return renderFinale();
+        const hintCount = Number(state.hints[puzzle.id] || 0);
+        const hints = (puzzle.hints || []).slice(0, hintCount);
+        const storyBlocks = (puzzle.story || []).map((item, index) => `<div class="panel story-card"><p class="story">${toHtml(item)}</p>${image((puzzle.storyImg || [])[index], `${puzzle.name} 故事圖`)}</div>`).join('');
+        const options = puzzle.puzzleType === 'choice' ? `<div class="choices">${(puzzle.puzzleOptions || []).map((option, index) => `<button class="choice ${selectedAnswer === letters[index] ? 'selected' : ''}" data-answer="${letters[index]}"><span class="choice-letter">${letters[index]}</span><span>${escapeHtml(option.label || option)}</span></button>`).join('')}</div>` : `<input id="text-answer" placeholder="${escapeHtml(puzzle.inputPlaceholder || '輸入答案')}" value="${escapeHtml(selectedAnswer)}">`;
+        app.innerHTML = `${renderTopbar()}<section class="stage">
+          <div class="mission-heading"><p class="chapter">${escapeHtml(puzzle.chapter || `MISSION ${puzzle.id}`)}</p><h1>${escapeHtml(puzzle.name)}</h1></div>
+          ${storyBlocks}
+          ${puzzle.landmarkImg ? `<div class="panel story-card"><h3>${escapeHtml(plainText(puzzle.landmarkText) || '現地線索')}</h3>${image(puzzle.landmarkImg, `${puzzle.name} 現地線索`)}</div>` : ''}
+          <div class="panel story-card"><p class="question">${toHtml(puzzle.puzzleDesc)}</p>${image(puzzle.puzzleImg, `${puzzle.name} 題目圖片`)}${options}
+            <div class="button-row"><button class="btn btn-gold" id="submit-answer">${escapeHtml(puzzle.submitBtnText || '送出答案')}</button>${hintCount < (puzzle.hints || []).length ? '<button class="btn btn-secondary" id="show-hint">查看提示</button>' : ''}</div>
+            <div class="hint-list">${hints.map(hint => `<div class="hint">${toHtml(hint)}</div>`).join('')}</div><p class="answer-feedback" id="answer-feedback"></p>
+          </div>
+        </section>${renderDrawer()}`;
+        document.getElementById('mission-menu').onclick = () => { drawerOpen = true; renderMission(); };
+        document.querySelectorAll('.choice').forEach(button => button.onclick = () => { selectedAnswer = button.dataset.answer; renderMission(); });
+        document.getElementById('show-hint')?.addEventListener('click', () => { state.hints[puzzle.id] = hintCount + 1; saveState(); renderMission(); });
+        document.getElementById('submit-answer').onclick = () => submitAnswer(puzzle);
+        document.getElementById('text-answer')?.addEventListener('keydown', event => { if (event.key === 'Enter') submitAnswer(puzzle); });
+        bindDrawer();
+      }
+      function renderDrawer() {
+        if (!drawerOpen) return '';
+        const items = enabledPuzzles().map(puzzle => {
+          const done = state.completed.includes(puzzle.id); const unlocked = isUnlocked(puzzle); const current = currentPuzzle()?.id === puzzle.id;
+          return `<button class="mission-item ${done ? 'done' : ''} ${current ? 'current' : ''}" data-mission-id="${puzzle.id}" ${unlocked ? '' : 'disabled'}><span class="mission-number">${escapeHtml(puzzle.chapter || String(puzzle.id))}</span><span class="mission-name">${escapeHtml(puzzle.name)}<small>${done ? '已完成' : unlocked ? '可進行' : '尚未解鎖'}</small></span><span class="badge ${unlocked ? '' : 'locked'}">${done ? '完成' : unlocked ? '進入' : '鎖定'}</span></button>`;
+        }).join('');
+        return `<div class="mission-sheet" id="mission-sheet"><section class="mission-drawer"><div class="drawer-head"><h2>任務列表</h2><button class="icon-button" id="close-drawer" aria-label="關閉">×</button></div><div class="mission-list">${items}</div><div class="button-row"><button class="btn btn-danger" id="reset-progress">清除本機進度</button></div></section></div>`;
+      }
+      function bindDrawer() {
+        document.getElementById('close-drawer')?.addEventListener('click', () => { drawerOpen = false; renderMission(); });
+        document.getElementById('mission-sheet')?.addEventListener('click', event => { if (event.target.id === 'mission-sheet') { drawerOpen = false; renderMission(); } });
+        document.querySelectorAll('[data-mission-id]').forEach(button => button.addEventListener('click', () => { state.currentId = Number(button.dataset.missionId); selectedAnswer = ''; drawerOpen = false; saveState(); renderMission(); }));
+        document.getElementById('reset-progress')?.addEventListener('click', () => { if (window.confirm('只會清除這支手機的遊戲進度，確定要重來嗎？')) { localStorage.removeItem(storageKey); state = loadState(); selectedAnswer = ''; drawerOpen = false; render(); } });
+      }
+      function normalized(value) { return String(value || '').trim().toUpperCase().replace(/\s+/g, ''); }
+      function submitAnswer(puzzle) {
+        const raw = puzzle.puzzleType === 'choice' ? selectedAnswer : document.getElementById('text-answer')?.value || '';
+        const answers = [puzzle.answer, ...(Array.isArray(puzzle.answers) ? puzzle.answers : [])].map(normalized).filter(Boolean);
+        const feedback = document.getElementById('answer-feedback');
+        if (!raw) { feedback.textContent = '請先選擇或輸入答案。'; return; }
+        if (!answers.includes(normalized(raw))) { feedback.textContent = plainText(puzzle.errorMsg || '答案尚未正確，請再觀察一次。'); return; }
+        if (!state.completed.includes(puzzle.id)) state.completed.push(puzzle.id);
+        state.currentId = puzzle.id; saveState(); selectedAnswer = ''; renderPassed(puzzle);
+      }
+      function renderPassed(puzzle) {
+        const next = nextPuzzle();
+        app.innerHTML = `${renderTopbar()}<section class="stage"><div class="panel success story-card"><p class="chapter">紀錄已確認</p><h1>${escapeHtml(puzzle.name)}</h1>${image(puzzle.postStoryImg, `${puzzle.name} 完成圖`)}<p class="story">${toHtml(puzzle.postStory || '關卡完成。')}</p>${puzzle.totemDesc ? `<p class="totem">${toHtml(puzzle.totemDesc)}</p>` : ''}${image(puzzle.totemImg, `${puzzle.name} 殘響卡`)}<div class="button-row"><button class="btn btn-gold" id="continue">${allComplete() ? '查看完成紀錄' : escapeHtml(puzzle.postStoryBtnText || '下一個任務')}</button><button class="btn btn-secondary" id="open-list">任務列表</button></div></div></section>`;
+        document.getElementById('continue').onclick = () => { if (allComplete()) renderFinale(); else { state.currentId = next?.id || null; saveState(); renderMission(); } };
+        document.getElementById('open-list').onclick = () => { drawerOpen = true; renderMission(); };
+      }
+      function renderFinale() {
+        state.endedAt = state.endedAt || Date.now(); saveState();
+        const config = game.config; const completedDate = new Intl.DateTimeFormat('zh-TW', { year:'numeric', month:'long', day:'numeric' }).format(new Date(state.endedAt));
+        app.innerHTML = `${renderTopbar()}<section class="stage finale"><div class="panel story-card"><p class="eyebrow">TRAINING COMPLETE</p><h1>${escapeHtml(config.successTitle || '訓練完成')}</h1>${image(config.successImg, '六張殘響卡') }<p class="story">${toHtml(config.successStory || config.endingPerfectStory || '你已完成所有訓練。')}</p></div><article class="certificate"><h2>新人受訓完成證書</h2><p>茲證明</p><div class="team">${escapeHtml(state.teamName)}</div><p>已完成「絕對傳奇：潮痕試煉」全部實地訓練，並成功記錄六道地方殘響。</p><p class="certificate-meta">完成日期：${escapeHtml(completedDate)}<br>BD-07 訓練紀錄</p></article><div class="button-row"><button class="btn btn-secondary" id="open-list">查看任務紀錄</button></div><p class="footer-note">本頁進度僅儲存在目前裝置的瀏覽器。</p></section>${renderDrawer()}`;
+        document.getElementById('mission-menu').onclick = () => { drawerOpen = true; renderFinale(); };
+        document.getElementById('open-list').onclick = () => { drawerOpen = true; renderFinale(); };
+        bindDrawer();
+      }
+      render();
+    })();
+  </script>
+</body>
+</html>
